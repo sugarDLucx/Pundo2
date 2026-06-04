@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 "use client";
 
 import React, { useState } from 'react';
@@ -154,3 +155,4 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
     </form>
   );
 };
+

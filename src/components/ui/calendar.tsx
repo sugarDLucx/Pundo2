@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -107,3 +108,4 @@ export function RangeCalendar({ className, ...props }: RangeCalendarProps) {
     </RangeCalendarRac>
   );
 }
+

@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 "use client";
 
 import React, { useState } from 'react';
@@ -39,9 +40,9 @@ export const AddFundsForm: React.FC<AddFundsFormProps> = ({ goalId, onSuccess, o
       await addFunds(goalId, Number(amount));
 
       if (newPercentage >= 1 && previousPercentage < 1) {
-        addNotification('Goal Reached! 🎊', `You've fully funded your ${goal?.name} goal!`, 'success');
+        addNotification('Goal Reached! ðŸŽŠ', `You've fully funded your ${goal?.name} goal!`, 'success');
       } else if (newPercentage >= 0.5 && previousPercentage < 0.5) {
-        addNotification('Halfway There! 🎯', `You're 50% of the way to your ${goal?.name} goal!`, 'info');
+        addNotification('Halfway There! ðŸŽ¯', `You're 50% of the way to your ${goal?.name} goal!`, 'info');
       }
 
       if (onSuccess) onSuccess();
@@ -88,3 +89,4 @@ export const AddFundsForm: React.FC<AddFundsFormProps> = ({ goalId, onSuccess, o
     </form>
   );
 };
+

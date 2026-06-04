@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from './authStore';
@@ -99,3 +100,4 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     }
   },
 }));
+

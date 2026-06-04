@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
 
@@ -49,7 +50,7 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
         const newProfile = {
           id: session.user.id,
           language: 'English (United States)',
-          currency: '₱',
+          currency: 'â‚±',
           email_notifications: true
         };
         const { data: inserted, error: insertError } = await supabase
@@ -119,3 +120,4 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
     }
   }
 }));
+

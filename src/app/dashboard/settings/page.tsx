@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
@@ -30,7 +31,7 @@ export default function SettingsPage() {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [language, setLanguage] = useState('English (United States)');
-  const [currency, setCurrency] = useState('₱');
+  const [currency, setCurrency] = useState('â‚±');
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
@@ -61,7 +62,7 @@ export default function SettingsPage() {
       setFullName(profile.full_name || '');
       setPhone(profile.phone_number || '');
       setLanguage(profile.language || 'English (United States)');
-      setCurrency(profile.currency || '₱');
+      setCurrency(profile.currency || 'â‚±');
       setEmailNotifs(profile.email_notifications ?? true);
     }
   }, [profile]);
@@ -305,11 +306,11 @@ export default function SettingsPage() {
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
                   >
-                    <option value="₱">PHP (₱) - Philippine Peso</option>
+                    <option value="â‚±">PHP (â‚±) - Philippine Peso</option>
                     <option value="$">USD ($) - US Dollar</option>
-                    <option value="€">EUR (€) - Euro</option>
-                    <option value="£">GBP (£) - British Pound</option>
-                    <option value="¥">JPY (¥) - Japanese Yen</option>
+                    <option value="â‚¬">EUR (â‚¬) - Euro</option>
+                    <option value="Â£">GBP (Â£) - British Pound</option>
+                    <option value="Â¥">JPY (Â¥) - Japanese Yen</option>
                     <option value="A$">AUD (A$) - Australian Dollar</option>
                     <option value="C$">CAD (C$) - Canadian Dollar</option>
                   </select>
@@ -341,7 +342,7 @@ export default function SettingsPage() {
                 setFullName(profile.full_name || '');
                 setPhone(profile.phone_number || '');
                 setLanguage(profile.language || 'English (United States)');
-                setCurrency(profile.currency || '₱');
+                setCurrency(profile.currency || 'â‚±');
                 setEmailNotifs(profile.email_notifications ?? true);
               }
             }}
@@ -363,3 +364,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+

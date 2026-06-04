@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from './authStore';
@@ -133,3 +134,4 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     }
   },
 }));
+

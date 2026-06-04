@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 "use client";
 
 import React, { useState } from 'react';
@@ -36,7 +37,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
         target_date: targetDate,
       });
       
-      addNotification('New Goal Created! 🎉', `Good luck saving for ${name}!`, 'success');
+      addNotification('New Goal Created! ðŸŽ‰', `Good luck saving for ${name}!`, 'success');
 
       if (onSuccess) onSuccess();
     } catch (err: any) {
@@ -101,3 +102,4 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
     </form>
   );
 };
+

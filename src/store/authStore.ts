@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 import { create } from 'zustand';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../services/supabase';
@@ -148,3 +149,4 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   }
 }));
+

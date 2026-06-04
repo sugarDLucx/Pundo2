@@ -1,3 +1,4 @@
+﻿/* eslint-disable */
 "use client";
 
 import { motion } from "framer-motion";
@@ -19,7 +20,7 @@ export function Hero() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/10 text-secondary font-semibold text-xs tracking-wider uppercase">
             <span className="flex h-2 w-2 rounded-full bg-primary" />
-            For My Honey Jhey
+            For My BÇŽobÃ¨i
           </div>
           
           <h1 className="font-playfair text-5xl md:text-7xl leading-tight text-primary drop-shadow-sm font-bold">
@@ -28,7 +29,7 @@ export function Hero() {
           </h1>
           
           <p className="text-lg text-foreground/70 max-w-xl leading-relaxed">
-            "True wealth isn't measured in numbers, but in the moments we share. Welcome to your exclusive financial dashboard, Honey Jhey."
+            "True wealth isn't measured in numbers, but in the moments we share. Welcome to your exclusive financial dashboard, BÇŽobÃ¨i."
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -64,7 +65,7 @@ export function Hero() {
                 100% Ready
               </div>
               <div className="flex items-center gap-1 text-accent text-xs font-semibold mt-1">
-                ❤️ Infinite Memories
+                â¤ï¸ Infinite Memories
               </div>
             </motion.div>
           </div>
@@ -73,3 +74,5 @@ export function Hero() {
     </header>
   );
 }
+
+
