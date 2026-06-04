@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: "Pundo - Our Future, Managed Together",
   description: "Your exclusive financial dashboard for tracking shared milestones, date night reserves, and securing your future.",
   keywords: ["personal finance", "wealth management", "couples finance", "budgeting", "goals tracking"],
-  authors: [{ name: "Yǒngyuǎn" }],
+  authors: [{ name: "Bǎobèi" }],
   openGraph: {
     title: "Pundo - Our Future, Managed Together",
     description: "Your exclusive financial dashboard for tracking shared milestones.",

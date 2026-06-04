@@ -9,8 +9,8 @@ const faqs = [
     answer: "Absolutely. Your heart, your trust, and your financial goals are guarded by the strongest foundation we have built together over the years.",
   },
   {
-    question: "Who do I contact for customer support?",
-    answer: "The sole developer, Bej, is on standby 24/7. Support tickets can be submitted via text, call, or a tap on the shoulder.",
+    question: "What kind of customer support is available?",
+    answer: "The sole developer, Yǒngyuǎn, is on standby 24/7. Support tickets can be submitted via text, call, or a tap on the shoulder.",
   },
   {
     question: "What happens if we go over our monthly budget?",

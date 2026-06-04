@@ -37,7 +37,7 @@ const tiers = [
     period: " together",
     description: "24/7 personalized support, infinite love, and a funded future.",
     features: [
-      "24/7 support from Bej",
+      "24/7 support from Yǒngyuǎn",
       "Infinite love",
       "A beautifully funded future",
     ],
