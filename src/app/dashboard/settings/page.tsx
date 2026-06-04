@@ -1,0 +1,365 @@
+"use client";
+
+import React, { useEffect, useState, useRef } from 'react';
+import { useAuthStore } from '@/store/authStore';
+import { useProfileStore } from '@/store/profileStore';
+import { useImageUpload } from '@/hooks/useImageUpload';
+import { useNotificationStore } from '@/store/notificationStore';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { 
+  User, 
+  ShieldCheck, 
+  Bell, 
+  Settings2,
+  Camera,
+  Loader2,
+  Save,
+  RefreshCw
+} from 'lucide-react';
+
+export default function SettingsPage() {
+  const { session, changePassword, fetchLoginHistory } = useAuthStore();
+  const { profile, updateProfile, loading: profileLoading, uploadAvatar } = useProfileStore();
+  const addNotification = useNotificationStore((state) => state.addNotification);
+
+  const [activeSection, setActiveSection] = useState('profile');
+  
+  // Local state
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [language, setLanguage] = useState('English (United States)');
+  const [currency, setCurrency] = useState('₱');
+  const [emailNotifs, setEmailNotifs] = useState(true);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  // Security state
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMsg, setPasswordMsg] = useState<{ type: 'error' | 'success', text: string } | null>(null);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const { previewUrl, fileInputRef, handleThumbnailClick, handleFileChange } = useImageUpload({
+    onUpload: async (url, file) => {
+      setUploadingAvatar(true);
+      try {
+        await uploadAvatar(file);
+        addNotification('Avatar Updated', 'Your profile picture has been updated.', 'success');
+      } catch (err: any) {
+        addNotification('Upload Failed', err.message, 'error');
+      } finally {
+        setUploadingAvatar(false);
+      }
+    }
+  });
+
+  useEffect(() => {
+    if (profile) {
+      setFullName(profile.full_name || '');
+      setPhone(profile.phone_number || '');
+      setLanguage(profile.language || 'English (United States)');
+      setCurrency(profile.currency || '₱');
+      setEmailNotifs(profile.email_notifications ?? true);
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    fetchLoginHistory();
+  }, [fetchLoginHistory]);
+
+  useEffect(() => {
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      let active = '';
+      let maxVisible = 0;
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > maxVisible) {
+          active = entry.target.id;
+          maxVisible = entry.intersectionRatio;
+        }
+      });
+      if (active) setActiveSection(active);
+    };
+    
+    observer.current = new IntersectionObserver(handleIntersect, {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: [0, 0.25, 0.5, 0.75, 1]
+    });
+
+    const sections = ['profile', 'security', 'notifications', 'preferences'];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.current?.observe(el);
+    });
+
+    return () => {
+      observer.current?.disconnect();
+    };
+  }, []);
+
+  const handleScrollTo = (id: string) => {
+    setActiveSection(id);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      await updateProfile({
+        full_name: fullName,
+        phone_number: phone,
+        language,
+        currency,
+        email_notifications: emailNotifs
+      });
+      addNotification('Settings Saved', 'Your profile has been updated.', 'success');
+    } catch (e: any) {
+      addNotification('Error', 'Failed to save settings: ' + e.message, 'error');
+    }
+  };
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setPasswordMsg({ type: 'error', text: 'New passwords do not match.' });
+      return;
+    }
+    try {
+      await changePassword(oldPassword, newPassword);
+      setPasswordMsg({ type: 'success', text: 'Password updated successfully.' });
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (e: any) {
+      setPasswordMsg({ type: 'error', text: 'Error updating password: ' + e.message });
+    }
+  };
+
+  const menuItems = [
+    { id: 'profile', label: 'Profile Information', icon: User },
+    { id: 'security', label: 'Security', icon: ShieldCheck },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'preferences', label: 'Preferences', icon: Settings2 },
+  ];
+
+  const inputClass = "flex h-11 w-full rounded-md border border-border/40 bg-surface/50 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+
+  return (
+    <div className="flex flex-col min-h-[calc(100vh-8rem)]">
+      <header className="mb-8">
+        <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">Settings</h2>
+        <p className="text-muted-foreground mt-1 text-sm">Manage your account preferences, security, and notifications.</p>
+      </header>
+
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 flex-1 pb-32">
+        <aside className="w-full lg:w-64 flex-shrink-0 z-10 sticky top-16 lg:top-24 pt-2 pb-2 lg:p-0">
+          <nav className="lg:sticky lg:top-24 bg-surface/50 border border-border/40 lg:rounded-2xl shadow-sm lg:p-3 -mx-4 px-4 lg:mx-0 overflow-x-auto no-scrollbar backdrop-blur-md">
+            <ul className="flex flex-row lg:flex-col space-x-2 lg:space-x-0 lg:space-y-1 w-max lg:w-auto py-3 lg:py-0">
+              {menuItems.map(item => (
+                <li key={item.id} className="shrink-0">
+                  <button
+                    onClick={() => handleScrollTo(item.id)}
+                    className={cn(
+                      "flex w-full items-center space-x-2 lg:space-x-3 px-4 py-2.5 lg:py-3 rounded-full lg:rounded-xl text-sm font-medium transition-all duration-200",
+                      activeSection === item.id 
+                        ? "bg-primary text-primary-foreground shadow-md scale-[1.02]" 
+                        : "text-muted-foreground hover:bg-border/40 hover:text-foreground"
+                    )}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+
+        <div className="flex-1 space-y-12">
+          
+          {/* Profile Section */}
+          <Card id="profile" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
+            <div className="mb-8 border-b border-border/40 pb-4">
+              <h2 className="font-playfair text-2xl font-bold text-foreground">Profile Information</h2>
+            </div>
+            <div className="flex flex-col md:flex-row gap-8 items-start mb-8">
+              <div className="flex flex-col items-center space-y-4">
+                <div 
+                  className="w-28 h-28 rounded-full bg-primary/10 border-4 border-surface shadow-md overflow-hidden relative group cursor-pointer transition-transform hover:scale-105" 
+                  onClick={handleThumbnailClick}
+                >
+                  {uploadingAvatar ? (
+                    <div className="w-full h-full flex items-center justify-center bg-primary/20 text-primary">
+                      <Loader2 className="w-8 h-8 animate-spin" />
+                    </div>
+                  ) : previewUrl || profile?.avatar_url ? (
+                    <img src={previewUrl || profile?.avatar_url || ''} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-primary/20 text-primary">
+                      <User className="w-12 h-12" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+                    <Camera className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileChange} 
+                  accept="image/*" 
+                  className="hidden" 
+                />
+              </div>
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Full Name</label>
+                  <input className={inputClass} type="text" value={fullName} onChange={e => setFullName(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Email</label>
+                  <input className={cn(inputClass, "opacity-60 cursor-not-allowed")} type="email" value={session?.user.email || ''} disabled />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Phone Number</label>
+                  <input className={inputClass} type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Security Section */}
+          <Card id="security" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
+            <div className="mb-8 border-b border-border/40 pb-4">
+              <h2 className="font-playfair text-2xl font-bold text-foreground">Security</h2>
+            </div>
+            <form onSubmit={handleUpdatePassword} className="space-y-4 max-w-md">
+              <div className="space-y-2">
+                <input type="password" placeholder="Current Password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className={inputClass} />
+              </div>
+              <div className="space-y-2">
+                <input type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
+              </div>
+              <div className="space-y-2">
+                <input type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputClass} />
+              </div>
+              <Button type="submit" className="w-full sm:w-auto mt-2">Change Password</Button>
+            </form>
+            {passwordMsg && (
+              <p className={cn("mt-4 text-sm font-medium", passwordMsg.type === 'error' ? "text-destructive" : "text-green-500")}>
+                {passwordMsg.text}
+              </p>
+            )}
+          </Card>
+
+          {/* Notifications Section */}
+          <Card id="notifications" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
+            <div className="mb-6 border-b border-border/40 pb-4">
+              <h2 className="font-playfair text-2xl font-bold text-foreground">Notifications</h2>
+            </div>
+            <div className="flex items-center justify-between py-2">
+              <div>
+                <h3 className="font-semibold text-foreground">Email Notifications</h3>
+                <p className="text-sm text-muted-foreground">Receive weekly summaries and goal alerts.</p>
+              </div>
+              <button onClick={() => setEmailNotifs(!emailNotifs)} className={cn("w-12 h-6 rounded-full relative transition-colors duration-200", emailNotifs ? 'bg-primary' : 'bg-border/60')}>
+                <span className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm", emailNotifs ? 'translate-x-6' : 'translate-x-0')} />
+              </button>
+            </div>
+          </Card>
+
+          {/* Preferences Section */}
+          <Card id="preferences" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
+            <div className="mb-8 border-b border-border/40 pb-4">
+              <h2 className="font-playfair text-2xl font-bold text-foreground">Preferences</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-border/40 mb-6">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Language</label>
+                <div className="relative">
+                  <select 
+                    className={inputClass}
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                  >
+                    <option value="English (United States)">English (United States)</option>
+                    <option value="English (United Kingdom)">English (United Kingdom)</option>
+                    <option value="Spanish (Spain)">Spanish (Spain)</option>
+                    <option value="French (France)">French (France)</option>
+                    <option value="German (Germany)">German (Germany)</option>
+                    <option value="Japanese (Japan)">Japanese (Japan)</option>
+                    <option value="Korean (South Korea)">Korean (South Korea)</option>
+                  </select>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Base Currency</label>
+                <div className="relative">
+                  <select 
+                    className={inputClass}
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value)}
+                  >
+                    <option value="₱">PHP (₱) - Philippine Peso</option>
+                    <option value="$">USD ($) - US Dollar</option>
+                    <option value="€">EUR (€) - Euro</option>
+                    <option value="£">GBP (£) - British Pound</option>
+                    <option value="¥">JPY (¥) - Japanese Yen</option>
+                    <option value="A$">AUD (A$) - Australian Dollar</option>
+                    <option value="C$">CAD (C$) - Canadian Dollar</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-foreground">Dark Mode</h3>
+                <p className="text-sm text-muted-foreground">Toggle the appearance of the dashboard.</p>
+              </div>
+              <button disabled className={cn("w-12 h-6 rounded-full relative transition-colors duration-200 bg-border/60 opacity-50 cursor-not-allowed")}>
+                <span className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm translate-x-0")} />
+              </button>
+            </div>
+          </Card>
+
+        </div>
+      </div>
+
+      {/* Floating Save Button */}
+      <div className="fixed bottom-0 right-0 w-full lg:w-[calc(100%-16rem)] p-4 bg-background/80 backdrop-blur-xl border-t border-border/40 z-30 flex justify-end">
+        <div className="w-full flex justify-end gap-3 px-2 md:px-8">
+          <Button 
+            variant="outline"
+            onClick={() => {
+              if (profile) {
+                setFullName(profile.full_name || '');
+                setPhone(profile.phone_number || '');
+                setLanguage(profile.language || 'English (United States)');
+                setCurrency(profile.currency || '₱');
+                setEmailNotifs(profile.email_notifications ?? true);
+              }
+            }}
+            className="rounded-full"
+          >
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Reset
+          </Button>
+          <Button 
+            onClick={handleUpdateProfile}
+            disabled={profileLoading}
+            className="rounded-full px-6 shadow-lg"
+          >
+            {profileLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+            {profileLoading ? 'Saving...' : 'Save Changes'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #faf9f6; /* Warm Alabaster */
+    --foreground: #1a1c1a;
+    
+    --primary: #420093; /* Royal Plum */
+    --primary-foreground: #ffffff;
+    --primary-container: #5b21b6;
+    
+    --secondary: #635c61; /* Blush Silk */
+    --secondary-foreground: #ffffff;
+    
+    --accent: #cca730; /* Champagne Gold */
+    --accent-foreground: #ffffff;
+    
+    --surface: #faf9f6;
+    --surface-variant: #e3e2e0;
+    
+    --muted: #e3e2e0;
+    --muted-foreground: #635c61;
+    
+    --popover: #ffffff;
+    --popover-foreground: #1a1c1a;
+    
+    --border: #e3e2e0;
+    --input: #e3e2e0;
+    --ring: #cca730;
+    
+    --radius: 16px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
