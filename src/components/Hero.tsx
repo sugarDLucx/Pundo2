@@ -1,4 +1,4 @@
-﻿/* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import { motion } from "framer-motion";
@@ -18,18 +18,17 @@ export function Hero() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="md:w-1/2 space-y-8"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/10 text-secondary font-semibold text-xs tracking-wider uppercase">
-            <span className="flex h-2 w-2 rounded-full bg-primary" />
-            For My BÇŽobÃ¨i
-          </div>
+          <p className="text-primary font-semibold tracking-wider uppercase text-sm mb-4">
+            For My Bǎobèi
+          </p>
           
-          <h1 className="font-playfair text-5xl md:text-7xl leading-tight text-primary drop-shadow-sm font-bold">
+          <h1 className="font-playfair text-5xl md:text-7xl font-bold text-foreground leading-tight tracking-tight mb-6">
             Our Future, <br />
-            <span className="italic text-accent">Managed Together.</span>
+            <span className="text-accent italic">Managed Together.</span>
           </h1>
           
-          <p className="text-lg text-foreground/70 max-w-xl leading-relaxed">
-            "True wealth isn't measured in numbers, but in the moments we share. Welcome to your exclusive financial dashboard, BÇŽobÃ¨i."
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            "True wealth isn't measured in numbers, but in the moments we share. Welcome to your exclusive financial dashboard, Bǎobèi."
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 pt-4">

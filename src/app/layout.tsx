@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: "Pundo - Our Future, Managed Together",
   description: "Your exclusive financial dashboard for tracking shared milestones, date night reserves, and securing your future.",
   keywords: ["personal finance", "wealth management", "couples finance", "budgeting", "goals tracking"],
-  authors: [{ name: "BÇŽobÃ¨i" }],
+  authors: [{ name: "Bǎobèi" }],
   openGraph: {
     title: "Pundo - Our Future, Managed Together",
     description: "Your exclusive financial dashboard for tracking shared milestones.",
