@@ -3,6 +3,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -32,12 +33,16 @@ export function Hero() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Button size="lg" className="rounded-full shadow-xl shadow-primary/10 tracking-widest text-xs uppercase px-10 py-6">
-              Begin Our Journey
-            </Button>
-            <Button variant="outline" size="lg" className="rounded-full tracking-widest text-xs uppercase px-10 py-6">
-              Explore The Future
-            </Button>
+            <Link href="/sign-up">
+              <Button size="lg" className="rounded-full shadow-xl shadow-primary/10 tracking-widest text-xs uppercase px-10 py-6">
+                Begin Our Journey
+              </Button>
+            </Link>
+            <Link href="#features">
+              <Button variant="outline" size="lg" className="rounded-full tracking-widest text-xs uppercase px-10 py-6">
+                Explore The Future
+              </Button>
+            </Link>
           </div>
         </motion.div>
         

@@ -22,8 +22,12 @@ export function Navbar() {
           <Link href="#faq" className="text-foreground/80 hover:text-foreground transition-colors">FAQ</Link>
         </nav>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="hidden md:flex">Log in</Button>
-          <Button className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90">Get Started</Button>
+          <Link href="/sign-in">
+            <Button variant="ghost" className="hidden md:flex">Log in</Button>
+          </Link>
+          <Link href="/sign-up">
+            <Button className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90">Get Started</Button>
+          </Link>
         </div>
       </div>
     </motion.header>
