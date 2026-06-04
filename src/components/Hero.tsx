@@ -63,8 +63,8 @@ export function Hero() {
               <div className="text-primary font-playfair text-2xl font-bold">
                 100% Ready
               </div>
-              <div className="flex items-center gap-1 text-accent text-xs font-semibold mt-1">
-                â¤ï¸ Infinite Memories
+              <div className="flex items-center gap-2 text-sm font-semibold text-accent mt-4">
+                ❤️ Infinite Memories
               </div>
             </motion.div>
           </div>

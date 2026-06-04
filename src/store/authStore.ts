@@ -1,4 +1,4 @@
-﻿/* eslint-disable */
+/* eslint-disable */
 import { create } from 'zustand';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../services/supabase';
@@ -75,6 +75,25 @@ export const useAuthStore = create<AuthState>((set) => ({
           console.warn("Failed to log login history (table might not exist yet)");
         }
       }
+    } catch (error: any) {
+      set({ error: error.message });
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  signInWithGoogle: async () => {
+    set({ loading: true, error: null });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          // Fallback to a default if window is undefined, though it runs in client
+          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined
+        }
+      });
+      if (error) throw error;
     } catch (error: any) {
       set({ error: error.message });
       throw error;
