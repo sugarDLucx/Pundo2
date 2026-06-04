@@ -19,7 +19,7 @@ export function Hero() {
           className="md:w-1/2 space-y-8"
         >
           <p className="text-primary font-semibold tracking-wider uppercase text-sm mb-4">
-            For My Bǎobèi
+            For My Yǒngyuǎn
           </p>
           
           <h1 className="font-playfair text-5xl md:text-7xl font-bold text-foreground leading-tight tracking-tight mb-6">
@@ -28,7 +28,7 @@ export function Hero() {
           </h1>
           
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            "True wealth isn't measured in numbers, but in the moments we share. Welcome to your exclusive financial dashboard, Bǎobèi."
+            "True wealth isn't measured in numbers, but in the moments we share. Welcome to your exclusive financial dashboard, Yǒngyuǎn."
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
