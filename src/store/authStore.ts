@@ -14,8 +14,8 @@ interface AuthState {
   setLoading: (loading: boolean) => void;
   signUp: (email: string, password: string, fullName?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
-  initialize: () => Promise<void>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
   fetchLoginHistory: () => Promise<void>;
 }
