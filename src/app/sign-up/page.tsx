@@ -80,9 +80,7 @@ export default function SignUpPage() {
           <div className="text-center mb-12">
             <Link href="/" className="inline-block">
               <div className="flex items-center justify-center space-x-3 cursor-pointer group mb-8">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                  <span className="font-playfair text-2xl font-bold text-white tracking-wider">P</span>
-                </div>
+                <img src="/logo.png" alt="Pundo Logo" className="w-12 h-12 object-contain group-hover:scale-105 transition-transform" />
               </div>
             </Link>
             <h1 className="font-playfair text-4xl md:text-5xl font-bold text-foreground mb-3">Begin Your Journey</h1>

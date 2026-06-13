@@ -59,9 +59,7 @@ export default function SignInPage() {
             <div className="flex items-center space-x-3">
               <Link href="/">
                 <div className="flex items-center space-x-3 cursor-pointer group">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                    <span className="font-playfair text-xl font-bold text-white tracking-wider">P</span>
-                  </div>
+                  <img src="/logo.png" alt="Pundo Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
                   <span className="font-playfair text-3xl font-bold text-primary tracking-tight">Pundo</span>
                 </div>
               </Link>
@@ -200,9 +198,9 @@ export default function SignInPage() {
           
           {/* Glassmorphic floating element to add depth */}
           <div className="absolute bottom-12 right-12 z-20 max-w-sm bg-background/70 backdrop-blur-xl p-6 rounded-2xl shadow-[0_8px_32px_rgba(66,0,147,0.05)] border border-white/20">
-            <p className="font-playfair text-xl text-foreground font-semibold mb-2">"True wealth is the freedom to curate your life."</p>
-            <div className="flex items-center space-x-2 text-muted-foreground mt-4">
-              <div className="w-8 h-[1px] bg-muted-foreground"></div>
+            <p className="font-playfair text-xl text-white font-semibold mb-2">"True wealth is the freedom to curate your life."</p>
+            <div className="flex items-center space-x-2 text-white/80 mt-4">
+              <div className="w-8 h-[1px] bg-white/80"></div>
               <span className="text-[10px] font-bold uppercase tracking-widest">Pundo Philosophy</span>
             </div>
           </div>
