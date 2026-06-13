@@ -23,6 +23,7 @@ export default function GoalsPage() {
   
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [addFundsTarget, setAddFundsTarget] = useState<string | null>(null);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   const user = useAuthStore((state) => state.user);
 
@@ -46,7 +47,12 @@ export default function GoalsPage() {
   };
 
   const totalSaved = goals.reduce((acc, goal) => acc + goal.current_amount, 0);
-  const activeGoalsCount = goals.length;
+  const activeGoalsCount = goals.filter(g => g.current_amount < g.target_amount).length;
+  
+  const filteredGoals = goals.filter(g => {
+    const isCompleted = g.current_amount >= g.target_amount;
+    return showCompleted ? true : !isCompleted;
+  });
   
   let onTrackCount = 0;
   let needsAttentionCount = 0;
@@ -80,10 +86,19 @@ export default function GoalsPage() {
           <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">Financial Goals</h2>
           <p className="text-muted-foreground mt-1 text-sm">Track and manage your savings targets.</p>
         </div>
-        <Button onClick={() => setIsGoalModalOpen(true)} className="flex items-center gap-2 rounded-full px-6 py-2 shadow-md">
-          <Plus className="w-4 h-4" />
-          Create Goal
-        </Button>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowCompleted(!showCompleted)}
+            className="rounded-full"
+          >
+            {showCompleted ? 'Hide Completed' : 'View Completed'}
+          </Button>
+          <Button onClick={() => setIsGoalModalOpen(true)} className="flex items-center gap-2 rounded-full px-6 py-2 shadow-md">
+            <Plus className="w-4 h-4" />
+            Create Goal
+          </Button>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -111,12 +126,12 @@ export default function GoalsPage() {
             <Card className="p-6"><Skeleton className="h-32 w-full" /></Card>
             <Card className="p-6"><Skeleton className="h-32 w-full" /></Card>
           </>
-        ) : goals.length === 0 ? (
+        ) : filteredGoals.length === 0 ? (
           <div className="col-span-full py-12 text-center text-muted-foreground">
-            No goals found. Create one to start saving!
+            {goals.length === 0 ? 'No goals found. Create one to start saving!' : 'No active goals. You can view your completed goals.'}
           </div>
         ) : (
-          goals.map((goal) => {
+          filteredGoals.map((goal) => {
             const percentage = Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100));
             const isCompleted = percentage >= 100;
             const progressColorText = getProgressColor(goal.current_amount, goal.target_amount);
