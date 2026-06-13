@@ -226,12 +226,25 @@ export default function DashboardPage() {
                   <YAxis width={80} axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 12 }} tickFormatter={(val) => val >= 1000000 ? `${currency}${(val/1000000).toFixed(1)}M` : val >= 1000 ? `${currency}${(val/1000).toFixed(1)}k` : `${currency}${val}`} />
                   <Tooltip 
                     cursor={{ fill: 'rgba(66, 0, 147, 0.05)' }}
-                    contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '12px', color: 'hsl(var(--foreground))', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                    itemStyle={{ color: 'hsl(var(--foreground))' }}
-                    formatter={(val: any) => `${currency}${Number(val).toLocaleString()}`}
+                    content={({ active, payload, label }) => {
+                      if (active && payload && payload.length) {
+                        return (
+                          <div className="bg-background border border-border/40 rounded-xl p-3 shadow-md min-w-[120px]">
+                            <p className="text-foreground font-semibold mb-2">{label}</p>
+                            {payload.map((entry: any, index: number) => (
+                              <div key={index} className="flex justify-between items-center gap-6 text-sm font-bold" style={{ color: entry.dataKey === 'income' ? '#22c55e' : '#ef4444' }}>
+                                <span className="capitalize">{entry.name}</span>
+                                <span>{currency}{Number(entry.value).toLocaleString()}</span>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
                   />
-                  <Bar dataKey="income" fill="#22c55e" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="expense" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="income" fill="#420093" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="expense" fill="#D4AF37" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
