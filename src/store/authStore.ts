@@ -19,6 +19,7 @@ interface AuthState {
   signOut: () => Promise<void>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
   fetchLoginHistory: () => Promise<void>;
+  initialize: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({

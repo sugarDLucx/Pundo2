@@ -40,5 +40,19 @@
   }
   body {
     @apply bg-background text-foreground;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Allow text selection in inputs and textareas */
+  input, textarea, [contenteditable="true"], .selectable-text {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  /* Prevent dragging of images and icons */
+  img, svg {
+    -webkit-user-drag: none;
+    user-drag: none;
   }
 }
