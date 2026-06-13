@@ -1,4 +1,4 @@
-﻿/* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -375,7 +375,7 @@ export default function DashboardPage() {
                   transactions.slice(0, 5).map((tx) => (
                     <tr key={tx.id} className="border-b border-border/20 hover:bg-primary/5 transition-colors group last:border-0">
                       <td className="py-4 text-muted-foreground">{tx.date}</td>
-                      <td className="py-4 font-medium text-foreground group-hover:text-primary transition-colors">{tx.note || 'â€”'}</td>
+                      <td className="py-4 font-medium text-foreground group-hover:text-primary transition-colors">{tx.note || '—'}</td>
                       <td className="py-4">
                         <span className="inline-block px-3 py-1 bg-secondary/10 text-secondary text-[10px] rounded-full uppercase font-bold tracking-wider">
                           {tx.category}
@@ -402,7 +402,7 @@ export default function DashboardPage() {
                 transactions.slice(0, 5).map((tx) => (
                   <div key={tx.id} className="p-4 rounded-xl bg-background border border-border/40 flex justify-between items-center shadow-sm">
                     <div>
-                      <p className="font-semibold text-foreground text-sm mb-1">{tx.note || 'â€”'}</p>
+                      <p className="font-semibold text-foreground text-sm mb-1">{tx.note || '—'}</p>
                       <div className="flex items-center gap-2">
                         <span className="inline-block px-2 py-0.5 bg-secondary/10 text-secondary font-bold text-[10px] rounded uppercase tracking-wider">
                           {tx.category}
