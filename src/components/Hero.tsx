@@ -1,11 +1,32 @@
 /* eslint-disable */
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
 export function Hero() {
+  const images = [
+    "/pics/2.jpeg",
+    "/pics/3.jpg",
+    "/pics/4.jpeg",
+    "/pics/5.jpg",
+    "/pics/6.jpg",
+    "/pics/7.jpg",
+    "/pics/8.jpeg",
+    "/pics/9.jpeg",
+    "/pics/10.jpeg",
+  ];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <header className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
       {/* Decorative Ambient Elements */}
@@ -50,11 +71,24 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="md:w-1/2 relative"
+          className="md:w-1/2 relative w-full"
         >
           <div className="bg-white/40 backdrop-blur-xl rounded-[40px] p-2 aspect-[4/5] relative overflow-hidden shadow-[0_20px_40px_-15px_rgba(66,0,147,0.06)] border border-white/40">
-            {/* Using a placeholder gradient since the local image might not be available yet */}
-            <div className="w-full h-full rounded-[32px] bg-gradient-to-br from-primary/10 to-accent/20 object-cover" />
+            <div className="w-full h-full rounded-[32px] relative overflow-hidden">
+              <AnimatePresence>
+                <motion.img 
+                  key={currentImageIndex}
+                  src={images[currentImageIndex]}
+                  alt="Memories"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1 }}
+                />
+              </AnimatePresence>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+            </div>
             
             {/* Floating Stat Card */}
             <motion.div 
