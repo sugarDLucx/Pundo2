@@ -79,11 +79,11 @@ export function Features() {
           <motion.div variants={itemVariants} className="md:col-span-6 group relative overflow-hidden rounded-[32px] bg-primary h-full min-h-[300px] flex items-center px-10 border border-primary-container/20">
             <div className="absolute inset-0 z-0">
                <img src="/pics/seamless.jpg" alt="Seamless" className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
-               <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-transparent" />
+               <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-transparent" />
             </div>
-            <div className="relative z-10">
-              <h3 className="font-playfair text-3xl font-bold text-primary-foreground mb-4 drop-shadow-md">Seamless Syncing</h3>
-              <p className="text-lg text-primary-foreground/90 max-w-sm drop-shadow-md">A perfectly balanced ledger that keeps our priorities aligned and our future secure.</p>
+            <div className="relative z-10 text-white">
+              <h3 className="font-playfair text-3xl font-bold mb-4 drop-shadow-md">Seamless Syncing</h3>
+              <p className="text-lg text-white/90 max-w-sm drop-shadow-md">A perfectly balanced ledger that keeps our priorities aligned and our future secure.</p>
             </div>
           </motion.div>
 
@@ -91,11 +91,11 @@ export function Features() {
           <motion.div variants={itemVariants} className="md:col-span-6 group relative overflow-hidden rounded-[32px] bg-accent h-full min-h-[300px] flex items-center px-10 border border-accent/20">
             <div className="absolute inset-0 z-0">
                <img src="/pics/1.png" alt="Memory" className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
-               <div className="absolute inset-0 bg-gradient-to-r from-accent/90 via-accent/70 to-transparent" />
+               <div className="absolute inset-0 bg-gradient-to-r from-accent/95 via-accent/80 to-transparent" />
             </div>
-            <div className="relative z-10">
-              <h3 className="font-playfair text-3xl font-bold text-accent-foreground mb-4 drop-shadow-md">Memory Vault</h3>
-              <p className="text-lg text-accent-foreground/90 max-w-sm drop-shadow-md">Attach photos and notes to specific savings goals to remind us why we are building this foundation.</p>
+            <div className="relative z-10 text-white">
+              <h3 className="font-playfair text-3xl font-bold mb-4 drop-shadow-md">Memory Vault</h3>
+              <p className="text-lg text-white/90 max-w-sm drop-shadow-md">Attach photos and notes to specific savings goals to remind us why we are building this foundation.</p>
             </div>
           </motion.div>
         </motion.div>
