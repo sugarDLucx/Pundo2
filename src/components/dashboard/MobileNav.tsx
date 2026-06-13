@@ -31,7 +31,7 @@ export function MobileNav() {
 
   return (
     <>
-      <nav className="md:hidden w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-4 border-b border-border/40">
+      <nav className="md:hidden w-full h-16 sticky top-0 z-50 bg-primary shadow-md flex justify-between items-center px-4 border-b border-primary/20">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 shrink-0 overflow-hidden rounded-full bg-primary/10 border border-primary/20">
             {profile?.avatar_url ? (
@@ -40,14 +40,14 @@ export function MobileNav() {
               <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain p-0.5" />
             )}
           </div>
-          <span className="font-playfair text-lg font-bold text-primary tracking-tight truncate">
+          <span className="font-playfair text-lg font-bold text-white tracking-tight truncate">
             {profile?.full_name || "Pundo"}
           </span>
         </div>
         <div className="flex items-center space-x-2">
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-            className="p-2 relative z-50 text-foreground/80 hover:text-primary transition-colors"
+            className="p-2 relative z-50 text-white/90 hover:text-white transition-colors"
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>

@@ -157,9 +157,9 @@ export default function SettingsPage() {
         <p className="text-muted-foreground mt-1 text-sm">Manage your account preferences, security, and notifications.</p>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 flex-1 pb-32">
-        <aside className="w-full lg:w-64 flex-shrink-0 z-10 sticky top-16 lg:top-24 pt-2 pb-2 lg:p-0">
-          <nav className="lg:sticky lg:top-24 bg-surface/50 border border-border/40 lg:rounded-2xl shadow-sm lg:p-3 -mx-4 px-4 lg:mx-0 overflow-x-auto no-scrollbar backdrop-blur-md">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 flex-1 pb-32 items-start">
+        <aside className="w-full lg:w-64 flex-shrink-0 z-10 sticky top-4 pt-2 pb-2 lg:p-0">
+          <nav className="bg-surface/50 border border-border/40 lg:rounded-2xl shadow-sm lg:p-3 -mx-4 px-4 lg:mx-0 overflow-x-auto no-scrollbar backdrop-blur-md">
             <ul className="flex flex-row lg:flex-col space-x-2 lg:space-x-0 lg:space-y-1 w-max lg:w-auto py-3 lg:py-0">
               {menuItems.map(item => (
                 <li key={item.id} className="shrink-0">
