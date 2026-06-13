@@ -54,29 +54,33 @@ export default function GoalsPage() {
     return showCompleted ? true : !isCompleted;
   });
   
-  let onTrackCount = 0;
-  let needsAttentionCount = 0;
-
-  goals.forEach(goal => {
+  const getGoalStatus = (goal: any) => {
     const percentage = (goal.current_amount / goal.target_amount) * 100;
-    if (percentage >= 100) {
-      onTrackCount++;
-      return;
-    }
-    
+    if (percentage >= 100) return 'COMPLETED';
+
     const startDate = goal.created_at ? new Date(goal.created_at) : new Date();
     const targetDate = new Date(goal.target_date);
     const currentDate = new Date();
     
-    const totalDays = differenceInDays(targetDate, startDate) || 1;
-    const elapsedDays = differenceInDays(currentDate, startDate);
-    const timePercentage = Math.min(100, Math.max(0, (elapsedDays / totalDays) * 100));
+    // Normalize dates to midnight to avoid time-of-day discrepancies
+    startDate.setHours(0, 0, 0, 0);
+    targetDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
 
-    if (percentage >= timePercentage) {
-      onTrackCount++;
-    } else {
-      needsAttentionCount++;
-    }
+    const totalDays = Math.max(1, differenceInDays(targetDate, startDate));
+    const elapsedDays = Math.max(0, differenceInDays(currentDate, startDate));
+    const timePercentage = Math.min(100, (elapsedDays / totalDays) * 100);
+
+    return percentage >= timePercentage ? 'ON TRACK' : 'NEEDS ATTENTION';
+  };
+
+  let onTrackCount = 0;
+  let needsAttentionCount = 0;
+
+  goals.forEach(goal => {
+    const status = getGoalStatus(goal);
+    if (status === 'ON TRACK') onTrackCount++;
+    if (status === 'NEEDS ATTENTION') needsAttentionCount++;
   });
 
   return (
@@ -115,7 +119,7 @@ export default function GoalsPage() {
           </div>
           <div className="flex gap-2 flex-wrap">
             <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">On Track: {onTrackCount}</span>
-            <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">Needs Attention: {needsAttentionCount}</span>
+            <span className="bg-red-500/10 text-red-500 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">Needs Attention: {needsAttentionCount}</span>
           </div>
         </Card>
       </div>
@@ -136,6 +140,8 @@ export default function GoalsPage() {
             const isCompleted = percentage >= 100;
             const progressColorText = getProgressColor(goal.current_amount, goal.target_amount);
             
+            const status = getGoalStatus(goal);
+            
             const targetDate = new Date(goal.target_date);
             const monthsRemaining = Math.max(1, differenceInMonths(targetDate, new Date()));
             const amountNeeded = Math.max(0, goal.target_amount - goal.current_amount);
@@ -151,10 +157,18 @@ export default function GoalsPage() {
                 
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-playfair text-2xl font-bold text-foreground line-clamp-1" title={goal.name}>
-                      {goal.name}
-                    </h3>
-                    <p className="text-xs font-medium text-muted-foreground mt-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-playfair text-2xl font-bold text-foreground line-clamp-1" title={goal.name}>
+                        {goal.name}
+                      </h3>
+                      {status === 'ON TRACK' && (
+                        <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0">On Track</span>
+                      )}
+                      {status === 'NEEDS ATTENTION' && (
+                        <span className="bg-red-500/10 text-red-500 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0">Needs Attention</span>
+                      )}
+                    </div>
+                    <p className="text-xs font-medium text-muted-foreground">
                       Target Date: {goal.target_date}
                     </p>
                   </div>
