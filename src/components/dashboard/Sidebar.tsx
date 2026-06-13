@@ -19,8 +19,8 @@ export function Sidebar() {
     <aside className="hidden w-64 flex-col border-r border-border/40 bg-surface/80 backdrop-blur-xl shadow-sm fixed left-0 top-0 h-screen z-20 md:flex">
       <div className="flex flex-col h-full py-6 px-4">
         <div className="flex items-center px-4 mb-10 gap-3">
-          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <span className="font-playfair text-xl font-bold text-primary">P</span>
+          <div className="w-10 h-10 shrink-0">
+            <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain" />
           </div>
           <div className="overflow-hidden">
             <h1 className="font-playfair text-lg font-bold text-primary tracking-tight truncate">Pundo</h1>

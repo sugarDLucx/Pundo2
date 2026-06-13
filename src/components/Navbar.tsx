@@ -14,6 +14,7 @@ export function Navbar() {
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-6 lg:px-12">
         <Link href="/" className="flex items-center gap-2">
+          <img src="/logo.png" alt="Pundo Logo" className="w-8 h-8 object-contain" />
           <span className="font-playfair text-2xl font-bold text-primary">Pundo.</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">

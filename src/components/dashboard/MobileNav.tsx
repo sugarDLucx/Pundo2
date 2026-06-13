@@ -22,8 +22,8 @@ export function MobileNav() {
     <>
       <nav className="md:hidden w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-4 border-b border-border/40">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <span className="font-playfair text-lg font-bold text-primary">P</span>
+          <div className="w-8 h-8 shrink-0">
+            <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain" />
           </div>
           <span className="font-playfair text-lg font-bold text-primary tracking-tight truncate">Pundo</span>
         </div>
