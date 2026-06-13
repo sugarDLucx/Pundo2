@@ -220,13 +220,14 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={300} minWidth={1} minHeight={1}>
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 12 }} />
                   <YAxis width={80} axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 12 }} tickFormatter={(val) => val >= 1000000 ? `${currency}${(val/1000000).toFixed(1)}M` : val >= 1000 ? `${currency}${(val/1000).toFixed(1)}k` : `${currency}${val}`} />
                   <Tooltip 
                     cursor={{ fill: 'rgba(66, 0, 147, 0.05)' }}
                     contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '12px', color: 'hsl(var(--foreground))', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    itemStyle={{ color: 'hsl(var(--foreground))' }}
                     formatter={(val: any) => `${currency}${Number(val).toLocaleString()}`}
                   />
                   <Bar dataKey="income" fill="#420093" radius={[4, 4, 0, 0]} />
@@ -247,7 +248,7 @@ export default function DashboardPage() {
             ) : categoryData.length > 0 ? (
               <div className="flex-1 w-full flex flex-col items-center justify-center gap-6 py-2">
                 <div className="w-full h-[180px] relative">
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                     <PieChart>
                       <Pie
                         data={categoryData}
@@ -265,6 +266,7 @@ export default function DashboardPage() {
                       </Pie>
                       <Tooltip 
                         contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '12px', color: 'hsl(var(--foreground))' }}
+                        itemStyle={{ color: 'hsl(var(--foreground))' }}
                         formatter={(val: any) => `${currency}${Number(val).toLocaleString()}`}
                       />
                     </PieChart>

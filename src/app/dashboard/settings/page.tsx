@@ -218,7 +218,10 @@ export default function SettingsPage() {
                     <Camera className="w-8 h-8 text-white" />
                   </div>
                 </div>
+                <label htmlFor="avatar-upload" className="sr-only">Upload Avatar</label>
                 <input 
+                  id="avatar-upload"
+                  name="avatar-upload"
                   type="file" 
                   ref={fileInputRef} 
                   onChange={handleFileChange} 
@@ -228,16 +231,16 @@ export default function SettingsPage() {
               </div>
               <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Full Name</label>
-                  <input className={inputClass} type="text" value={fullName} onChange={e => setFullName(e.target.value)} />
+                  <label htmlFor="fullName" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Full Name</label>
+                  <input id="fullName" name="fullName" className={inputClass} type="text" value={fullName} onChange={e => setFullName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Email</label>
-                  <input className={cn(inputClass, "opacity-60 cursor-not-allowed")} type="email" value={session?.user.email || ''} disabled />
+                  <label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Email</label>
+                  <input id="email" name="email" className={cn(inputClass, "opacity-60 cursor-not-allowed")} type="email" value={session?.user.email || ''} disabled />
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Phone Number</label>
-                  <input className={inputClass} type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+                  <label htmlFor="phone" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Phone Number</label>
+                  <input id="phone" name="phone" className={inputClass} type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
                 </div>
               </div>
             </div>
@@ -250,13 +253,16 @@ export default function SettingsPage() {
             </div>
             <form onSubmit={handleUpdatePassword} className="space-y-4 max-w-md">
               <div className="space-y-2">
-                <input type="password" placeholder="Current Password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className={inputClass} />
+                <label htmlFor="oldPassword" className="sr-only">Current Password</label>
+                <input id="oldPassword" name="oldPassword" type="password" placeholder="Current Password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className={inputClass} />
               </div>
               <div className="space-y-2">
-                <input type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
+                <label htmlFor="newPassword" className="sr-only">New Password</label>
+                <input id="newPassword" name="newPassword" type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
               </div>
               <div className="space-y-2">
-                <input type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputClass} />
+                <label htmlFor="confirmPassword" className="sr-only">Confirm New Password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputClass} />
               </div>
               <Button type="submit" className="w-full sm:w-auto mt-2">Change Password</Button>
             </form>

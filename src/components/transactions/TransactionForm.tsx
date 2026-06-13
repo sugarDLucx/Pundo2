@@ -93,8 +93,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Amount</label>
+        <label htmlFor="amount" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Amount</label>
         <input
+          id="amount"
+          name="amount"
           type="number"
           step="0.01"
           value={amount}
@@ -106,8 +108,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none">Category</label>
+        <label htmlFor="category" className="text-sm font-medium leading-none">Category</label>
         <select
+          id="category"
+          name="category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           required
@@ -125,8 +129,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none">Note (Optional)</label>
+        <label htmlFor="note" className="text-sm font-medium leading-none">Note (Optional)</label>
         <input
+          id="note"
+          name="note"
           type="text"
           value={note}
           onChange={(e) => setNote(e.target.value)}

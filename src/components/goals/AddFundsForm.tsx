@@ -1,4 +1,4 @@
-﻿/* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import React, { useState } from 'react';
@@ -58,8 +58,10 @@ export const AddFundsForm: React.FC<AddFundsFormProps> = ({ goalId, onSuccess, o
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none">Amount to Add</label>
+        <label htmlFor="addAmount" className="text-sm font-medium leading-none">Amount to Add</label>
         <input
+          id="addAmount"
+          name="addAmount"
           type="number"
           step="0.01"
           value={amount}

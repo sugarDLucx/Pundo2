@@ -53,8 +53,10 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none">Goal Name</label>
+        <label htmlFor="goalName" className="text-sm font-medium leading-none">Goal Name</label>
         <input
+          id="goalName"
+          name="goalName"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -65,8 +67,10 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none">Target Amount</label>
+        <label htmlFor="targetAmount" className="text-sm font-medium leading-none">Target Amount</label>
         <input
+          id="targetAmount"
+          name="targetAmount"
           type="number"
           step="0.01"
           value={targetAmount}
