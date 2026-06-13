@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 export default function SignInPage() {
@@ -58,8 +59,8 @@ export default function SignInPage() {
             {/* Logo */}
             <div className="flex items-center space-x-3">
               <Link href="/">
-                <div className="flex items-center space-x-3 cursor-pointer group">
-                  <img src="/logo.png" alt="Pundo Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
+                <div className="flex items-center space-x-3 cursor-pointer">
+                  <Image src="/logo.png" alt="Pundo Logo" width={40} height={40} className="object-contain group-hover:scale-105 transition-transform" priority />
                   <span className="font-playfair text-3xl font-bold text-primary tracking-tight">Pundo</span>
                 </div>
               </Link>
@@ -94,6 +95,7 @@ export default function SignInPage() {
                     placeholder="your@email.com" 
                     required 
                     value={email}
+                    autoComplete="email"
                     onChange={(e) => setEmail(e.target.value)}
                     className="block w-full pl-12 pr-4 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
                   />
@@ -121,6 +123,7 @@ export default function SignInPage() {
                     placeholder="••••••••" 
                     required 
                     value={password}
+                    autoComplete="current-password"
                     onChange={(e) => setPassword(e.target.value)}
                     className="block w-full pl-12 pr-12 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
                   />
@@ -190,9 +193,11 @@ export default function SignInPage() {
         <div className="hidden lg:block lg:w-1/2 relative bg-surface overflow-hidden">
           {/* Decorative overlay to soften the image slightly */}
           <div className="absolute inset-0 bg-primary/5 z-10 mix-blend-multiply pointer-events-none"></div>
-          <img 
+          <Image 
             alt="Elegant interior scene" 
-            className="absolute inset-0 w-full h-full object-cover" 
+            className="object-cover" 
+            fill
+            priority
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
           />
           

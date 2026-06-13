@@ -2,7 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { format, differenceInMonths, differenceInDays } from 'date-fns';
-import { Plus, Trophy, Calendar as CalendarIcon, Trash2 } from 'lucide-react';
+import { Plus, Trophy, Calendar as CalendarIcon, Trash2, MoreHorizontal, Edit } from 'lucide-react';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,6 +29,7 @@ export default function GoalsPage() {
   const currency = profile?.currency || '₱';
   
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+  const [editingGoal, setEditingGoal] = useState<any>(null);
   const [addFundsTarget, setAddFundsTarget] = useState<string | null>(null);
   const [showCompleted, setShowCompleted] = useState(false);
 
@@ -172,13 +180,32 @@ export default function GoalsPage() {
                       Target Date: {goal.target_date}
                     </p>
                   </div>
-                  <button
-                    onClick={() => handleDelete(goal.id)}
-                    className="text-muted-foreground hover:text-destructive transition-colors p-2 -mr-2 -mt-2 rounded-full hover:bg-destructive/10"
-                    title="Delete Goal"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className="text-muted-foreground hover:text-foreground transition-colors p-2 -mr-2 -mt-2 rounded-full hover:bg-surface"
+                        title="Options"
+                      >
+                        <MoreHorizontal className="w-5 h-5" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => {
+                        setEditingGoal(goal);
+                        setIsGoalModalOpen(true);
+                      }}>
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit Goal
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => handleDelete(goal.id)}
+                        className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
 
                 <div className="flex flex-col gap-2 flex-1 justify-center">
@@ -222,13 +249,28 @@ export default function GoalsPage() {
         )}
       </div>
 
-      <Modal
-        isOpen={isGoalModalOpen}
-        onClose={() => setIsGoalModalOpen(false)}
-        title="Create New Goal"
-      >
-        <GoalForm onSuccess={() => setIsGoalModalOpen(false)} onCancel={() => setIsGoalModalOpen(false)} />
-      </Modal>
+      {isGoalModalOpen && (
+        <Modal 
+          isOpen={isGoalModalOpen} 
+          onClose={() => {
+            setIsGoalModalOpen(false);
+            setEditingGoal(null);
+          }} 
+          title={editingGoal ? "Edit Goal" : "Create New Goal"}
+        >
+          <GoalForm 
+            initialData={editingGoal}
+            onSuccess={() => {
+              setIsGoalModalOpen(false);
+              setEditingGoal(null);
+            }} 
+            onCancel={() => {
+              setIsGoalModalOpen(false);
+              setEditingGoal(null);
+            }} 
+          />
+        </Modal>
+      )}
 
       <Modal
         isOpen={!!addFundsTarget}

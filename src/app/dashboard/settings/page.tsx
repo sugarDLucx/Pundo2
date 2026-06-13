@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
 import { useImageUpload } from '@/hooks/useImageUpload';
@@ -167,7 +168,7 @@ export default function SettingsPage() {
       </header>
 
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 flex-1 pb-32 items-start">
-        <aside className="w-full lg:w-64 flex-shrink-0 z-10 sticky top-4 pt-2 pb-2 lg:p-0">
+        <aside className="w-full lg:w-64 flex-shrink-0 z-10 lg:sticky lg:top-24 pt-2 pb-2 lg:p-0">
           <nav className="bg-surface/50 border border-border/40 lg:rounded-2xl shadow-sm lg:p-3 -mx-4 px-4 lg:mx-0 overflow-x-auto no-scrollbar backdrop-blur-md">
             <ul className="flex flex-row lg:flex-col space-x-2 lg:space-x-0 lg:space-y-1 w-max lg:w-auto py-3 lg:py-0">
               {menuItems.map(item => (
@@ -208,7 +209,7 @@ export default function SettingsPage() {
                       <Loader2 className="w-8 h-8 animate-spin" />
                     </div>
                   ) : previewUrl || profile?.avatar_url ? (
-                    <img src={previewUrl || profile?.avatar_url || ''} alt="Avatar" className="w-full h-full object-cover" />
+                    <Image src={previewUrl || profile?.avatar_url || ''} alt="Avatar" fill className="object-cover" unoptimized={!!previewUrl} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-primary/20 text-primary">
                       <User className="w-12 h-12" />
@@ -232,7 +233,7 @@ export default function SettingsPage() {
               <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                 <div className="space-y-2">
                   <label htmlFor="fullName" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Full Name</label>
-                  <input id="fullName" name="fullName" className={inputClass} type="text" value={fullName} onChange={e => setFullName(e.target.value)} />
+                  <input id="fullName" name="fullName" autoComplete="name" className={inputClass} type="text" value={fullName} onChange={e => setFullName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Email</label>
@@ -240,7 +241,7 @@ export default function SettingsPage() {
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <label htmlFor="phone" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Phone Number</label>
-                  <input id="phone" name="phone" className={inputClass} type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+                  <input id="phone" name="phone" autoComplete="tel" className={inputClass} type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
                 </div>
               </div>
             </div>
@@ -254,15 +255,15 @@ export default function SettingsPage() {
             <form onSubmit={handleUpdatePassword} className="space-y-4 max-w-md">
               <div className="space-y-2">
                 <label htmlFor="oldPassword" className="sr-only">Current Password</label>
-                <input id="oldPassword" name="oldPassword" type="password" placeholder="Current Password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className={inputClass} />
+                <input id="oldPassword" name="oldPassword" autoComplete="current-password" type="password" placeholder="Current Password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className={inputClass} />
               </div>
               <div className="space-y-2">
                 <label htmlFor="newPassword" className="sr-only">New Password</label>
-                <input id="newPassword" name="newPassword" type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
+                <input id="newPassword" name="newPassword" autoComplete="new-password" type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
               </div>
               <div className="space-y-2">
                 <label htmlFor="confirmPassword" className="sr-only">Confirm New Password</label>
-                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputClass} />
+                <input id="confirmPassword" name="confirmPassword" autoComplete="new-password" type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputClass} />
               </div>
               <Button type="submit" className="w-full sm:w-auto mt-2">Change Password</Button>
             </form>

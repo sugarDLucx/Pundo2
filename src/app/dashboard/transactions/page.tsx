@@ -79,7 +79,7 @@ export default function TransactionsPage() {
     return acc;
   }, {} as Record<string, { amount: number, count: number }>);
 
-  let topCategory = '—';
+  let topCategory = '-';
   let topCategoryStats = { amount: 0, count: 0 };
   for (const cat in categoryTotals) {
     if (categoryTotals[cat].amount > topCategoryStats.amount) {
@@ -160,7 +160,7 @@ export default function TransactionsPage() {
             <div className="font-playfair text-3xl font-bold text-foreground mb-1 truncate">
               {topCategory}
             </div>
-            {topCategory !== '—' && (
+            {topCategory !== '-' && (
               <span className="text-xs font-medium text-muted-foreground">
                 {topCategoryStats.count} transactions ({currency}{topCategoryStats.amount.toFixed(2)})
               </span>
@@ -177,7 +177,7 @@ export default function TransactionsPage() {
           </div>
           <div>
             <div className="font-playfair text-3xl font-bold text-foreground mb-1 truncate">
-              {largestExpense ? (largestExpense.note || largestExpense.category) : '—'}
+              {largestExpense ? (largestExpense.note || largestExpense.category) : '-'}
             </div>
             {largestExpense && (
               <span className="text-xs font-medium text-muted-foreground">
@@ -269,7 +269,7 @@ export default function TransactionsPage() {
                 filteredTransactions.map((tx) => (
                   <tr key={tx.id} className="border-b border-border/20 hover:bg-primary/5 transition-colors group">
                     <td className="px-6 py-4 text-muted-foreground">{format(parseISO(tx.date), 'MMM do, yyyy')}</td>
-                    <td className="px-6 py-4 font-medium group-hover:text-primary transition-colors">{tx.note || '—'}</td>
+                    <td className="px-6 py-4 font-medium group-hover:text-primary transition-colors">{tx.note || '-'}</td>
                     <td className="px-6 py-4">
                       <span className="inline-block px-3 py-1 text-[11px] rounded-full uppercase tracking-wider font-bold bg-secondary/20 text-secondary">
                         {tx.category}
@@ -307,7 +307,7 @@ export default function TransactionsPage() {
                <div key={tx.id} className="p-4 rounded-xl bg-surface/50 border border-border/40 flex flex-col gap-3 shadow-sm">
                  <div className="flex justify-between items-start">
                    <div>
-                     <p className="font-semibold text-foreground mb-1 leading-tight">{tx.note || '—'}</p>
+                     <p className="font-semibold text-foreground mb-1 leading-tight">{tx.note || '-'}</p>
                      <p className="text-xs text-muted-foreground">{format(parseISO(tx.date), 'MMM do, yyyy')}</p>
                    </div>
                    <div className={cn("font-medium text-lg", tx.type === 'income' ? 'text-green-500' : 'text-red-500')}>

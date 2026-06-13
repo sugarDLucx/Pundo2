@@ -103,6 +103,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           onChange={(e) => setAmount(e.target.value)}
           placeholder="0.00"
           required
+          autoComplete="off"
           className={inputClass}
         />
       </div>
@@ -137,6 +138,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           value={note}
           onChange={(e) => setNote(e.target.value)}
           placeholder="What was this for?"
+          autoComplete="off"
           className={inputClass}
         />
       </div>

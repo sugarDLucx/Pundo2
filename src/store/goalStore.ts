@@ -1,4 +1,4 @@
-﻿/* eslint-disable */
+/* eslint-disable */
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from './authStore';
@@ -20,6 +20,7 @@ interface GoalState {
   error: string | null;
   fetchGoals: () => Promise<void>;
   addGoal: (goal: Omit<Goal, 'id' | 'user_id' | 'created_at' | 'current_amount'>) => Promise<void>;
+  updateGoal: (id: string, updates: Partial<Goal>) => Promise<void>;
   addFunds: (id: string, amount: number) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
 }
@@ -67,6 +68,30 @@ export const useGoalStore = create<GoalState>((set, get) => ({
       set((state) => ({ goals: [data as Goal, ...state.goals] }));
     } catch (err: any) {
       console.error('Error adding goal:', err);
+      set({ error: err.message });
+      throw err;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  updateGoal: async (id: string, updates: Partial<Goal>) => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('goals')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      set((state) => ({
+        goals: state.goals.map((g) => (g.id === id ? (data as Goal) : g)),
+      }));
+    } catch (err: any) {
+      console.error('Error updating goal:', err);
       set({ error: err.message });
       throw err;
     } finally {

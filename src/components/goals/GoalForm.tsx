@@ -4,21 +4,22 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
-import { useGoalStore } from '@/store/goalStore';
+import { useGoalStore, Goal } from '@/store/goalStore';
 import { useNotificationStore } from '@/store/notificationStore';
 
 interface GoalFormProps {
+  initialData?: Goal;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
-  const addGoal = useGoalStore((state) => state.addGoal);
+export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCancel }) => {
+  const { addGoal, updateGoal } = useGoalStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
   
-  const [name, setName] = useState('');
-  const [targetAmount, setTargetAmount] = useState('');
-  const [targetDate, setTargetDate] = useState('');
+  const [name, setName] = useState(initialData?.name || '');
+  const [targetAmount, setTargetAmount] = useState(initialData?.target_amount?.toString() || '');
+  const [targetDate, setTargetDate] = useState(initialData?.target_date || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,13 +33,21 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
     setLoading(true);
     setError(null);
     try {
-      await addGoal({
-        name,
-        target_amount: Number(targetAmount),
-        target_date: targetDate,
-      });
-      
-      addNotification('New Goal Created! ðŸŽ‰', `Good luck saving for ${name}!`, 'success');
+      if (initialData) {
+        await updateGoal(initialData.id, {
+          name,
+          target_amount: Number(targetAmount),
+          target_date: targetDate,
+        });
+        addNotification('Goal Updated', `${name} has been successfully updated.`, 'success');
+      } else {
+        await addGoal({
+          name,
+          target_amount: Number(targetAmount),
+          target_date: targetDate,
+        });
+        addNotification('New Goal Created! 🎉', `Good luck saving for ${name}!`, 'success');
+      }
 
       if (onSuccess) onSuccess();
     } catch (err: any) {
@@ -62,6 +71,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. New Car, Emergency Fund"
           required
+          autoComplete="off"
           className={inputClass}
         />
       </div>
@@ -77,6 +87,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
           onChange={(e) => setTargetAmount(e.target.value)}
           placeholder="0.00"
           required
+          autoComplete="off"
           className={inputClass}
         />
       </div>
@@ -95,7 +106,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
           </Button>
         )}
         <Button type="submit" disabled={loading}>
-          {loading ? 'Saving...' : 'Create Goal'}
+          {loading ? 'Saving...' : initialData ? 'Save Changes' : 'Create Goal'}
         </Button>
       </div>
     </form>

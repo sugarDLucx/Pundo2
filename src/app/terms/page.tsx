@@ -1,5 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { ShieldCheck, ShieldAlert, ArrowLeft } from 'lucide-react';
 
 export default function TermsOfServicePage() {
   return (
@@ -7,7 +9,7 @@ export default function TermsOfServicePage() {
       <main className="flex-grow py-24 px-6 lg:px-12 max-w-4xl mx-auto w-full">
         <Link href="/" className="inline-block mb-12 group">
           <div className="flex items-center space-x-3 cursor-pointer">
-            <img src="/logo.png" alt="Pundo Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
+            <Image src="/logo.png" alt="Pundo Logo" width={40} height={40} className="object-contain group-hover:scale-105 transition-transform" />
             <span className="font-playfair text-2xl font-bold text-primary tracking-tight">Pundo</span>
           </div>
         </Link>

@@ -2,6 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export function Features() {
   const containerVariants: any = {
@@ -52,7 +53,7 @@ export function Features() {
           {/* Shared Milestones */}
           <motion.div variants={itemVariants} className="md:col-span-8 group relative overflow-hidden rounded-[32px] bg-white/40 backdrop-blur-xl transition-all hover:scale-[1.01] shadow-[0_20px_40px_-15px_rgba(66,0,147,0.06)] border border-border/40">
             <div className="absolute inset-0 z-0">
-              <img src="/pics/milestone.jpg" alt="Milestones" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" />
+              <Image src="/pics/milestone.jpg" alt="Milestones" fill className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent" />
             </div>
             <div className="absolute bottom-10 left-10 right-10 z-10 text-white">
@@ -78,7 +79,7 @@ export function Features() {
           {/* Seamless Syncing */}
           <motion.div variants={itemVariants} className="md:col-span-6 group relative overflow-hidden rounded-[32px] bg-primary h-full min-h-[300px] flex items-center px-10 border border-primary-container/20">
             <div className="absolute inset-0 z-0">
-               <img src="/pics/seamless.jpg" alt="Seamless" className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
+               <Image src="/pics/seamless.jpg" alt="Seamless" fill className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
                <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-transparent" />
             </div>
             <div className="relative z-10 text-white">
@@ -90,7 +91,7 @@ export function Features() {
           {/* Memory Vault */}
           <motion.div variants={itemVariants} className="md:col-span-6 group relative overflow-hidden rounded-[32px] bg-accent h-full min-h-[300px] flex items-center px-10 border border-accent/20">
             <div className="absolute inset-0 z-0">
-               <img src="/pics/1.png" alt="Memory" className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
+               <Image src="/pics/1.png" alt="Memory" fill className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
                <div className="absolute inset-0 bg-gradient-to-r from-accent/95 via-accent/80 to-transparent" />
             </div>
             <div className="relative z-10 text-white">

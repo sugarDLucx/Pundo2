@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { useProfileStore } from "@/store/profileStore";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import Image from "next/image";
 import { LayoutDashboard, ArrowLeftRight, Target, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +20,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { signOut } = useAuthStore();
   const { profile } = useProfileStore();
+  const { t } = useLanguage();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -29,11 +32,11 @@ export function Sidebar() {
     <aside className="hidden w-64 flex-col border-r border-border/40 bg-surface/80 backdrop-blur-xl shadow-sm fixed left-0 top-0 h-screen z-20 md:flex">
       <div className="flex flex-col h-full py-6 px-4">
         <div className="flex items-center px-4 mb-10 gap-3">
-          <div className="w-10 h-10 shrink-0 overflow-hidden rounded-full bg-primary/10 border border-primary/20">
+          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-surface shrink-0 relative">
             {profile?.avatar_url ? (
-              <img src={profile.avatar_url} alt="User Avatar" className="w-full h-full object-cover" />
+              <Image src={profile.avatar_url} alt="User Avatar" fill className="object-cover" />
             ) : (
-              <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain p-1" />
+              <Image src="/logo.png" alt="Pundo Logo" fill className="object-contain p-1" />
             )}
           </div>
           <div className="overflow-hidden">
@@ -61,7 +64,7 @@ export function Sidebar() {
                 )}
               >
                 <Icon className={cn("h-5 w-5", isActive ? "text-primary" : "text-foreground/60")} />
-                <span>{item.name}</span>
+                <span>{t(item.name)}</span>
               </Link>
             );
           })}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 export default function SignUpPage() {
@@ -80,7 +81,7 @@ export default function SignUpPage() {
           <div className="text-center mb-12">
             <Link href="/" className="inline-block">
               <div className="flex items-center justify-center space-x-3 cursor-pointer group mb-8">
-                <img src="/logo.png" alt="Pundo Logo" className="w-12 h-12 object-contain group-hover:scale-105 transition-transform" />
+                <Image src="/logo.png" alt="Pundo Logo" width={48} height={48} className="object-contain group-hover:scale-105 transition-transform" />
               </div>
             </Link>
             <h1 className="font-playfair text-4xl md:text-5xl font-bold text-foreground mb-3">Begin Your Journey</h1>
@@ -102,6 +103,7 @@ export default function SignUpPage() {
                   type="text" 
                   placeholder="Jane Doe" 
                   required
+                  autoComplete="name"
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
                   className="w-full bg-surface border border-border/40 rounded-xl px-4 py-3 text-foreground text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors placeholder:text-muted-foreground shadow-sm"
@@ -119,6 +121,7 @@ export default function SignUpPage() {
                   type="email" 
                   placeholder="jane@example.com" 
                   required
+                  autoComplete="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="w-full bg-surface border border-border/40 rounded-xl px-4 py-3 text-foreground text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors placeholder:text-muted-foreground shadow-sm"
@@ -137,6 +140,7 @@ export default function SignUpPage() {
                     type={showPassword ? 'text' : 'password'} 
                     placeholder="••••••••" 
                     required
+                    autoComplete="new-password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     className="w-full bg-surface border border-border/40 rounded-xl px-4 py-3 pr-12 text-foreground text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors placeholder:text-muted-foreground shadow-sm"

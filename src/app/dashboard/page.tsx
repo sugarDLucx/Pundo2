@@ -11,6 +11,7 @@ import { useGoalStore } from '@/store/goalStore';
 import { useProfileStore } from '@/store/profileStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import { cn } from '@/lib/utils';
 import { 
   GripVertical, 
@@ -66,12 +67,13 @@ export default function DashboardPage() {
   const { goals, loading: goalsLoading, fetchGoals } = useGoalStore();
   const { profile, updateProfile } = useProfileStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
-  const currency = profile?.currency || 'â‚±';
+  const currency = profile?.currency || '₱';
 
   const [layout, setLayout] = useState<string[]>(['overview', 'charts', 'goals', 'transactions']);
   const [timeframe, setTimeframe] = useState<number>(6);
 
   const user = useAuthStore((state) => state.user);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (user) {
@@ -162,7 +164,7 @@ export default function DashboardPage() {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="flex flex-col justify-between h-40 p-6 relative overflow-hidden group border border-primary/20 bg-gradient-to-br from-surface to-primary/5">
           <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground flex items-center justify-between z-10">
-            Total Balance
+            {t("Total Balance")}
             <div className="bg-primary/10 p-2 rounded-full text-primary">
               <Wallet className="w-5 h-5" />
             </div>
@@ -174,7 +176,7 @@ export default function DashboardPage() {
 
         <Card className="flex flex-col justify-between h-40 p-6 border border-border/40 bg-surface/50">
           <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground flex items-center justify-between">
-            Total Income
+            {t("Total Income")}
             <div className="bg-green-500/10 p-2 rounded-full text-green-500">
               <TrendingUp className="w-5 h-5" />
             </div>
@@ -186,7 +188,7 @@ export default function DashboardPage() {
 
         <Card className="flex flex-col justify-between h-40 p-6 border border-border/40 bg-surface/50">
           <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground flex items-center justify-between">
-            Total Expenses
+            {t("Total Expenses")}
             <div className="bg-destructive/10 p-2 rounded-full text-destructive">
               <TrendingDown className="w-5 h-5" />
             </div>
@@ -201,15 +203,15 @@ export default function DashboardPage() {
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <Card className="xl:col-span-2 min-h-[360px] flex flex-col p-6 border border-border/40 bg-surface/50">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-playfair text-2xl font-bold text-foreground">Income vs Expenses</h3>
+            <h3 className="font-playfair text-2xl font-bold text-foreground">{t("Income vs Expenses")}</h3>
             <select 
               value={timeframe} 
               onChange={e => setTimeframe(Number(e.target.value))}
               className="bg-background text-foreground border border-border/40 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer"
             >
-              <option value={3}>Last 3 Months</option>
-              <option value={6}>Last 6 Months</option>
-              <option value={12}>Last 12 Months</option>
+              <option value={3}>{t("Last 3 Months")}</option>
+              <option value={6}>{t("Last 6 Months")}</option>
+              <option value={12}>{t("Last 12 Months")}</option>
             </select>
           </div>
           <div className="flex-1 w-full min-h-[300px]">
@@ -253,7 +255,7 @@ export default function DashboardPage() {
 
         <div className="xl:col-span-1 flex flex-col gap-6">
           <Card className="flex flex-col flex-1 p-6 border border-border/40 bg-surface/50">
-            <h3 className="font-playfair text-2xl font-bold text-foreground mb-4">Category Breakdown</h3>
+            <h3 className="font-playfair text-2xl font-bold text-foreground mb-4">{t("Category Breakdown")}</h3>
             {loading ? (
               <div className="flex-1 flex items-center justify-center">
                 <Skeleton className="w-48 h-48 rounded-full opacity-50" />
@@ -304,7 +306,7 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
-                No expense data
+                {t("No expense data")}
               </div>
             )}
           </Card>
@@ -315,9 +317,9 @@ export default function DashboardPage() {
       <section>
         <Card className="flex flex-col gap-4 p-6 border border-border/40 bg-surface/50">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-playfair text-2xl font-bold text-foreground">Active Goals</h3>
+            <h3 className="font-playfair text-2xl font-bold text-foreground">{t("Active Goals")}</h3>
             <Link href="/dashboard/goals" className="text-primary text-sm font-semibold hover:underline flex items-center">
-              View All <ChevronRight className="w-4 h-4 ml-1" />
+              {t("View All")} <ChevronRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
           {goalsLoading && goals.length === 0 ? (
@@ -327,7 +329,7 @@ export default function DashboardPage() {
             </div>
           ) : goals.length === 0 ? (
             <div className="py-6 text-center text-muted-foreground text-sm">
-              No active goals. Start saving today!
+              {t("No active goals. Start saving today!")}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -362,9 +364,9 @@ export default function DashboardPage() {
       <section>
         <Card className="overflow-x-auto p-6 border border-border/40 bg-surface/50">
           <div className="flex justify-between items-center mb-6 min-w-full">
-            <h3 className="font-playfair text-2xl font-bold text-foreground">Recent Transactions</h3>
+            <h3 className="font-playfair text-2xl font-bold text-foreground mb-6">{t("Recent Transactions")}</h3>
             <Link href="/dashboard/transactions" className="text-primary text-sm font-semibold hover:underline flex items-center">
-              View All <ChevronRight className="w-4 h-4 ml-1" />
+              {t("View All")} <ChevronRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
           
@@ -372,10 +374,10 @@ export default function DashboardPage() {
             <table className="w-full text-left min-w-[600px]">
               <thead>
                 <tr className="border-b border-border/40 text-muted-foreground text-xs uppercase tracking-wider">
-                  <th className="pb-4 font-semibold">Date</th>
-                  <th className="pb-4 font-semibold">Description</th>
-                  <th className="pb-4 font-semibold">Category</th>
-                  <th className="pb-4 font-semibold text-right">Amount</th>
+                  <th className="pb-4 font-semibold">{t("Date")}</th>
+                  <th className="pb-4 font-semibold">{t("Description")}</th>
+                  <th className="pb-4 font-semibold">{t("Category")}</th>
+                  <th className="pb-4 font-semibold text-right">{t("Amount")}</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
@@ -389,13 +391,13 @@ export default function DashboardPage() {
                   </>
                 ) : transactions.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="text-center text-muted-foreground py-8">No transactions yet</td>
+                    <td colSpan={4} className="text-center text-muted-foreground py-8">{t("No transactions yet")}</td>
                   </tr>
                 ) : (
                   transactions.slice(0, 5).map((tx) => (
                     <tr key={tx.id} className="border-b border-border/20 hover:bg-primary/5 transition-colors group last:border-0">
                       <td className="py-4 text-muted-foreground">{tx.date}</td>
-                      <td className="py-4 font-medium text-foreground group-hover:text-primary transition-colors">{tx.note || '—'}</td>
+                      <td className="py-4 font-medium text-foreground group-hover:text-primary transition-colors">{tx.note || '-'}</td>
                       <td className="py-4">
                         <span className="inline-block px-3 py-1 bg-secondary/10 text-secondary text-[10px] rounded-full uppercase font-bold tracking-wider">
                           {tx.category}
@@ -417,12 +419,12 @@ export default function DashboardPage() {
                    <Skeleton key={i} className="h-20 w-full rounded-xl opacity-50" />
                 ))
              ) : transactions.length === 0 ? (
-                <div className="text-center text-muted-foreground py-6">No transactions yet</div>
+                <div className="text-center text-muted-foreground py-6">{t("No transactions yet")}</div>
              ) : (
                 transactions.slice(0, 5).map((tx) => (
                   <div key={tx.id} className="p-4 rounded-xl bg-background border border-border/40 flex justify-between items-center shadow-sm">
                     <div>
-                      <p className="font-semibold text-foreground text-sm mb-1">{tx.note || '—'}</p>
+                      <p className="font-semibold text-foreground text-sm mb-1">{tx.note || '-'}</p>
                       <div className="flex items-center gap-2">
                         <span className="inline-block px-2 py-0.5 bg-secondary/10 text-secondary font-bold text-[10px] rounded uppercase tracking-wider">
                           {tx.category}
@@ -446,8 +448,8 @@ export default function DashboardPage() {
     <div className="space-y-6 pb-20">
       <header className="mb-8 flex justify-between items-end">
         <div>
-          <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">Overview</h2>
-          <p className="text-muted-foreground mt-1 text-sm">Here's your fiscal health at a glance.</p>
+          <h1 className="font-playfair text-4xl font-bold text-primary tracking-tight">{t("Dashboard")}</h1>
+          <p className="text-muted-foreground mt-1 text-sm">{t("Here's your fiscal health at a glance.")}</p>
         </div>
       </header>
 
