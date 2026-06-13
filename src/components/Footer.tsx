@@ -13,7 +13,6 @@ export function Footer() {
         <div className="flex flex-wrap justify-center gap-8">
           <Link href="/privacy" className="text-xs font-semibold uppercase tracking-widest text-foreground/60 hover:text-primary transition-colors">Privacy Policy</Link>
           <Link href="/terms" className="text-xs font-semibold uppercase tracking-widest text-foreground/60 hover:text-primary transition-colors">Terms of Service</Link>
-          <Link href="mailto:support@pundo.com" className="text-xs font-semibold uppercase tracking-widest text-foreground/60 hover:text-primary transition-colors">Contact</Link>
           <Link href="#pricing" className="text-xs font-semibold uppercase tracking-widest text-foreground/60 hover:text-primary transition-colors">Membership</Link>
         </div>
         
