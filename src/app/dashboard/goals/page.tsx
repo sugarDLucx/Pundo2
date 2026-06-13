@@ -12,6 +12,7 @@ import { ProgressBar } from '@/components/ui/progress-bar';
 import { GoalForm } from '@/components/goals/GoalForm';
 import { AddFundsForm } from '@/components/goals/AddFundsForm';
 import { useGoalStore } from '@/store/goalStore';
+import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
 import { cn } from '@/lib/utils';
 
@@ -23,9 +24,13 @@ export default function GoalsPage() {
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [addFundsTarget, setAddFundsTarget] = useState<string | null>(null);
 
+  const user = useAuthStore((state) => state.user);
+
   useEffect(() => {
-    fetchGoals();
-  }, [fetchGoals]);
+    if (user) {
+      fetchGoals();
+    }
+  }, [user, fetchGoals]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this goal?')) {

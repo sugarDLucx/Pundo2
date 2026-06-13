@@ -11,6 +11,7 @@ import { Modal } from '@/components/ui/modal';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionForm } from '@/components/transactions/TransactionForm';
 import { useTransactionStore } from '@/store/transactionStore';
+import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
 import { cn } from '@/lib/utils';
 
@@ -23,9 +24,13 @@ export default function TransactionsPage() {
   const [filterCategory, setFilterCategory] = useState('All Categories');
   const [filterType, setFilterType] = useState('All Types');
 
+  const user = useAuthStore((state) => state.user);
+
   useEffect(() => {
-    fetchTransactions();
-  }, [fetchTransactions]);
+    if (user) {
+      fetchTransactions();
+    }
+  }, [user, fetchTransactions]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this transaction?')) {

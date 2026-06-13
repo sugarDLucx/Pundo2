@@ -69,7 +69,7 @@ export function MobileNav() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden fixed inset-x-0 top-16 z-40 bg-surface/95 backdrop-blur-xl border-b border-border/40 shadow-lg"
+              className="md:hidden fixed inset-x-0 top-16 z-40 bg-primary/95 text-white backdrop-blur-xl border-b border-primary/20 shadow-lg"
             >
               <div className="flex flex-col p-4 space-y-2">
                 {navItems.map((item) => {
@@ -84,11 +84,11 @@ export function MobileNav() {
                       className={cn(
                         "flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium",
                         isActive
-                          ? "text-primary font-bold bg-primary/5"
-                          : "text-foreground/70 hover:text-primary hover:bg-primary/5"
+                          ? "text-primary-foreground font-bold bg-white/20"
+                          : "text-white/70 hover:text-white hover:bg-white/10"
                       )}
                     >
-                      <Icon className={cn("h-5 w-5", isActive ? "text-primary" : "text-foreground/60")} />
+                      <Icon className={cn("h-5 w-5", isActive ? "text-white" : "text-white/60")} />
                       <span>{item.name}</span>
                     </Link>
                   );
@@ -96,7 +96,7 @@ export function MobileNav() {
                 <div className="pt-2 mt-2 border-t border-border/40">
                   <button
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-foreground/70 hover:bg-destructive/10 hover:text-destructive transition-colors text-sm font-medium"
+                    className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-white/70 hover:bg-destructive/80 hover:text-white transition-colors text-sm font-medium"
                   >
                     <LogOut className="h-5 w-5" />
                     <span>Log out</span>

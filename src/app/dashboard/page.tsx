@@ -10,6 +10,7 @@ import { useTransactionStore } from '@/store/transactionStore';
 import { useGoalStore } from '@/store/goalStore';
 import { useProfileStore } from '@/store/profileStore';
 import { useNotificationStore } from '@/store/notificationStore';
+import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import { 
   GripVertical, 
@@ -70,16 +71,20 @@ export default function DashboardPage() {
   const [layout, setLayout] = useState<string[]>(['overview', 'charts', 'goals', 'transactions']);
   const [timeframe, setTimeframe] = useState<number>(6);
 
+  const user = useAuthStore((state) => state.user);
+
   useEffect(() => {
-    fetchTransactions();
-    fetchGoals();
+    if (user) {
+      fetchTransactions();
+      fetchGoals();
+    }
     
     const hasSeenWelcome = localStorage.getItem('hasSeenWelcome_v2');
     if (!hasSeenWelcome) {
-      addNotification('Welcome to Pundo 2.0! âœ¨', 'Experience the new Luxe design. Your financial dashboard is ready.', 'info');
+      addNotification('Welcome to Pundo 2.0! ✨', 'Experience the new Luxe design. Your financial dashboard is ready.', 'info');
       localStorage.setItem('hasSeenWelcome_v2', 'true');
     }
-  }, [fetchTransactions, fetchGoals, addNotification]);
+  }, [user, fetchTransactions, fetchGoals, addNotification]);
 
   useEffect(() => {
     if (profile?.dashboard_layout && Array.isArray(profile.dashboard_layout) && profile.dashboard_layout.length > 0) {
