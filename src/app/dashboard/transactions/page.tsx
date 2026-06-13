@@ -14,6 +14,15 @@ import { useTransactionStore } from '@/store/transactionStore';
 import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from '@/components/ui/dropdown-menu';
 
 export default function TransactionsPage() {
   const { transactions, loading, fetchTransactions, deleteTransaction } = useTransactionStore();
@@ -106,7 +115,7 @@ export default function TransactionsPage() {
     return true;
   });
 
-  const selectClass = "bg-surface/50 text-foreground border border-border/40 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary appearance-none flex-1 cursor-pointer";
+  const filterOptionsClass = "flex h-11 items-center justify-between bg-surface/50 text-foreground border border-border/40 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary appearance-none flex-1 cursor-pointer hover:bg-surface/70 transition-colors";
 
   return (
     <div className="space-y-6 pb-20">
@@ -179,39 +188,56 @@ export default function TransactionsPage() {
         </Card>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 mb-4">
-        <select 
-          value={filterMonth} 
-          onChange={e => setFilterMonth(e.target.value)}
-          className={selectClass}
-        >
-          <option value="This Month">This Month</option>
-          <option value="Last Month">Last Month</option>
-          <option value="Last 3 Months">Last 3 Months</option>
-          <option value="All Time">All Time</option>
-        </select>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.3 }}
+        className="flex flex-col sm:flex-row gap-4 mb-4"
+      >
+        <DropdownMenu>
+          <DropdownMenuTrigger className={filterOptionsClass}>
+            <span>{filterMonth}</span>
+            <ChevronDown className="w-4 h-4 ml-2 opacity-50" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px]">
+            <DropdownMenuRadioGroup value={filterMonth} onValueChange={setFilterMonth}>
+              <DropdownMenuRadioItem value="This Month">This Month</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Last Month">Last Month</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Last 3 Months">Last 3 Months</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="All Time">All Time</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
         
-        <select 
-          value={filterCategory} 
-          onChange={e => setFilterCategory(e.target.value)}
-          className={selectClass}
-        >
-          <option value="All Categories">All Categories</option>
-          {uniqueCategories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+        <DropdownMenu>
+          <DropdownMenuTrigger className={filterOptionsClass}>
+            <span className="truncate">{filterCategory}</span>
+            <ChevronDown className="w-4 h-4 ml-2 opacity-50 flex-shrink-0" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] max-h-[300px] overflow-y-auto">
+            <DropdownMenuRadioGroup value={filterCategory} onValueChange={setFilterCategory}>
+              <DropdownMenuRadioItem value="All Categories">All Categories</DropdownMenuRadioItem>
+              {uniqueCategories.map(cat => (
+                <DropdownMenuRadioItem key={cat} value={cat}>{cat}</DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-        <select 
-          value={filterType} 
-          onChange={e => setFilterType(e.target.value)}
-          className={selectClass}
-        >
-          <option value="All Types">All Types</option>
-          <option value="Expense">Expense</option>
-          <option value="Income">Income</option>
-        </select>
-      </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className={filterOptionsClass}>
+            <span>{filterType}</span>
+            <ChevronDown className="w-4 h-4 ml-2 opacity-50" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px]">
+            <DropdownMenuRadioGroup value={filterType} onValueChange={setFilterType}>
+              <DropdownMenuRadioItem value="All Types">All Types</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Expense">Expense</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Income">Income</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </motion.div>
 
       <Card className="overflow-hidden">
         {/* Desktop Table View */}

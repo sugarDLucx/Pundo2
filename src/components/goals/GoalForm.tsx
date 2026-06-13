@@ -1,8 +1,9 @@
-﻿/* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import { useGoalStore } from '@/store/goalStore';
 import { useNotificationStore } from '@/store/notificationStore';
 
@@ -78,13 +79,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSuccess, onCancel }) => {
 
       <div className="space-y-2">
         <label className="text-sm font-medium leading-none">Target Date</label>
-        <input
-          type="date"
-          value={targetDate}
-          onChange={(e) => setTargetDate(e.target.value)}
-          required
-          className={inputClass}
-        />
+        <DatePicker value={targetDate} onChange={setTargetDate} />
       </div>
 
       {error && <div className="text-sm text-destructive">{error}</div>}

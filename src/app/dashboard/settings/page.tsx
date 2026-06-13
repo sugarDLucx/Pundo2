@@ -17,8 +17,17 @@ import {
   Camera,
   Loader2,
   Save,
-  RefreshCw
+  RefreshCw,
+  ChevronDown
 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from '@/components/ui/dropdown-menu';
 
 export default function SettingsPage() {
   const { session, changePassword, fetchLoginHistory } = useAuthStore();
@@ -280,42 +289,56 @@ export default function SettingsPage() {
               <h2 className="font-playfair text-2xl font-bold text-foreground">Preferences</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-border/40 mb-6">
-              <div className="space-y-2">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-2"
+              >
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Language</label>
-                <div className="relative">
-                  <select 
-                    className={inputClass}
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                  >
-                    <option value="English (United States)">English (United States)</option>
-                    <option value="English (United Kingdom)">English (United Kingdom)</option>
-                    <option value="Spanish (Spain)">Spanish (Spain)</option>
-                    <option value="French (France)">French (France)</option>
-                    <option value="German (Germany)">German (Germany)</option>
-                    <option value="Japanese (Japan)">Japanese (Japan)</option>
-                    <option value="Korean (South Korea)">Korean (South Korea)</option>
-                  </select>
-                </div>
-              </div>
-              <div className="space-y-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger className={cn(inputClass, "flex items-center justify-between hover:bg-surface/70 transition-colors")}>
+                    <span className="truncate">{language}</span>
+                    <ChevronDown className="w-4 h-4 ml-2 opacity-50 flex-shrink-0" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] max-h-[300px] overflow-y-auto">
+                    <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
+                      <DropdownMenuRadioItem value="English (United States)">English (United States)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="English (United Kingdom)">English (United Kingdom)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="Spanish (Spain)">Spanish (Spain)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="French (France)">French (France)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="German (Germany)">German (Germany)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="Japanese (Japan)">Japanese (Japan)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="Korean (South Korea)">Korean (South Korea)</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+                className="space-y-2"
+              >
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Base Currency</label>
-                <div className="relative">
-                  <select 
-                    className={inputClass}
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                  >
-                    <option value="₱">PHP (₱) - Philippine Peso</option>
-                    <option value="$">USD ($) - US Dollar</option>
-                    <option value="€">EUR (€) - Euro</option>
-                    <option value="£">GBP (£) - British Pound</option>
-                    <option value="¥">JPY (¥) - Japanese Yen</option>
-                    <option value="A$">AUD (A$) - Australian Dollar</option>
-                    <option value="C$">CAD (C$) - Canadian Dollar</option>
-                  </select>
-                </div>
-              </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className={cn(inputClass, "flex items-center justify-between hover:bg-surface/70 transition-colors")}>
+                    <span className="truncate">{currency === '₱' ? 'PHP (₱) - Philippine Peso' : currency === '$' ? 'USD ($) - US Dollar' : currency === '€' ? 'EUR (€) - Euro' : currency === '£' ? 'GBP (£) - British Pound' : currency === '¥' ? 'JPY (¥) - Japanese Yen' : currency === 'A$' ? 'AUD (A$) - Australian Dollar' : 'CAD (C$) - Canadian Dollar'}</span>
+                    <ChevronDown className="w-4 h-4 ml-2 opacity-50 flex-shrink-0" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] max-h-[300px] overflow-y-auto">
+                    <DropdownMenuRadioGroup value={currency} onValueChange={setCurrency}>
+                      <DropdownMenuRadioItem value="₱">PHP (₱) - Philippine Peso</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="$">USD ($) - US Dollar</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="€">EUR (€) - Euro</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="£">GBP (£) - British Pound</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="¥">JPY (¥) - Japanese Yen</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="A$">AUD (A$) - Australian Dollar</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="C$">CAD (C$) - Canadian Dollar</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </motion.div>
             </div>
             
             <div className="flex items-center justify-between">

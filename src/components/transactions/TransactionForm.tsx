@@ -1,8 +1,9 @@
-﻿/* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
+import { DatePicker } from '../ui/date-picker';
 import { useTransactionStore } from '../../store/transactionStore';
 import type { TransactionType } from '../../store/transactionStore';
 import { useNotificationStore } from '../../store/notificationStore';
@@ -120,13 +121,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
 
       <div className="space-y-2">
         <label className="text-sm font-medium leading-none">Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          className={inputClass}
-        />
+        <DatePicker value={date} onChange={setDate} />
       </div>
 
       <div className="space-y-2">
