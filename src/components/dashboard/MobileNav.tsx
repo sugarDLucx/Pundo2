@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
+import { useProfileStore } from "@/store/profileStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LayoutDashboard, ArrowLeftRight, Target, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -17,15 +19,30 @@ const navItems = [
 export function MobileNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { signOut } = useAuthStore();
+  const { profile } = useProfileStore();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    setMobileMenuOpen(false);
+    await signOut();
+    router.push('/sign-in');
+  };
 
   return (
     <>
       <nav className="md:hidden w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-4 border-b border-border/40">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 shrink-0">
-            <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain" />
+          <div className="w-8 h-8 shrink-0 overflow-hidden rounded-full bg-primary/10 border border-primary/20">
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} alt="User Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain p-0.5" />
+            )}
           </div>
-          <span className="font-playfair text-lg font-bold text-primary tracking-tight truncate">Pundo</span>
+          <span className="font-playfair text-lg font-bold text-primary tracking-tight truncate">
+            {profile?.full_name || "Pundo"}
+          </span>
         </div>
         <div className="flex items-center space-x-2">
           <button 
@@ -78,7 +95,7 @@ export function MobileNav() {
                 })}
                 <div className="pt-2 mt-2 border-t border-border/40">
                   <button
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={handleLogout}
                     className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-foreground/70 hover:bg-destructive/10 hover:text-destructive transition-colors text-sm font-medium"
                   >
                     <LogOut className="h-5 w-5" />

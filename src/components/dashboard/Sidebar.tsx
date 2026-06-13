@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
+import { useProfileStore } from "@/store/profileStore";
 import { LayoutDashboard, ArrowLeftRight, Target, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,16 +16,30 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { signOut } = useAuthStore();
+  const { profile } = useProfileStore();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/sign-in');
+  };
 
   return (
     <aside className="hidden w-64 flex-col border-r border-border/40 bg-surface/80 backdrop-blur-xl shadow-sm fixed left-0 top-0 h-screen z-20 md:flex">
       <div className="flex flex-col h-full py-6 px-4">
         <div className="flex items-center px-4 mb-10 gap-3">
-          <div className="w-10 h-10 shrink-0">
-            <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain" />
+          <div className="w-10 h-10 shrink-0 overflow-hidden rounded-full bg-primary/10 border border-primary/20">
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} alt="User Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <img src="/logo.png" alt="Pundo Logo" className="w-full h-full object-contain p-1" />
+            )}
           </div>
           <div className="overflow-hidden">
-            <h1 className="font-playfair text-lg font-bold text-primary tracking-tight truncate">Pundo</h1>
+            <h1 className="font-playfair text-lg font-bold text-primary tracking-tight truncate">
+              {profile?.full_name || "Pundo"}
+            </h1>
             <p className="text-xs text-foreground/60 truncate">Your Wealth, Curated.</p>
           </div>
         </div>
@@ -53,6 +69,7 @@ export function Sidebar() {
 
         <div className="mt-auto pt-4 border-t border-border/40">
           <button
+            onClick={handleLogout}
             className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/70 hover:bg-destructive/10 hover:text-destructive transition-colors text-sm font-medium mt-2"
           >
             <LogOut className="h-5 w-5" />
