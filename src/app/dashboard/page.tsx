@@ -175,7 +175,7 @@ export default function DashboardPage() {
         <Card className="flex flex-col justify-between h-40 p-6 border border-border/40 bg-surface/50">
           <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground flex items-center justify-between">
             Total Income
-            <div className="bg-secondary/10 p-2 rounded-full text-secondary">
+            <div className="bg-green-500/10 p-2 rounded-full text-green-500">
               <TrendingUp className="w-5 h-5" />
             </div>
           </h3>
@@ -230,8 +230,8 @@ export default function DashboardPage() {
                     itemStyle={{ color: 'hsl(var(--foreground))' }}
                     formatter={(val: any) => `${currency}${Number(val).toLocaleString()}`}
                   />
-                  <Bar dataKey="income" fill="#420093" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="expense" fill="#D4AF37" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="income" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="expense" fill="#ef4444" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -388,7 +388,7 @@ export default function DashboardPage() {
                           {tx.category}
                         </span>
                       </td>
-                      <td className={cn("py-4 text-right font-bold", tx.type === 'income' ? 'text-secondary' : 'text-foreground')}>
+                      <td className={cn("py-4 text-right font-bold", tx.type === 'income' ? 'text-green-500' : 'text-red-500')}>
                         {tx.type === 'income' ? '+' : '-'}{currency}{Math.abs(tx.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}
                       </td>
                     </tr>
@@ -417,7 +417,7 @@ export default function DashboardPage() {
                         <span className="text-muted-foreground text-xs">{tx.date}</span>
                       </div>
                     </div>
-                    <div className={cn("font-bold text-lg", tx.type === 'income' ? 'text-secondary' : 'text-foreground')}>
+                    <div className={cn("font-bold text-lg", tx.type === 'income' ? 'text-green-500' : 'text-red-500')}>
                       {tx.type === 'income' ? '+' : '-'}{currency}{Math.abs(tx.amount).toFixed(2)}
                     </div>
                   </div>

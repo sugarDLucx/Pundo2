@@ -275,7 +275,7 @@ export default function TransactionsPage() {
                         {tx.category}
                       </span>
                     </td>
-                    <td className={cn("px-6 py-4 text-right font-medium", tx.type === 'income' ? 'text-accent' : 'text-foreground')}>
+                    <td className={cn("px-6 py-4 text-right font-medium", tx.type === 'income' ? 'text-green-500' : 'text-red-500')}>
                       {tx.type === 'income' ? '+' : '-'}{currency}{Math.abs(tx.amount).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -310,7 +310,7 @@ export default function TransactionsPage() {
                      <p className="font-semibold text-foreground mb-1 leading-tight">{tx.note || '—'}</p>
                      <p className="text-xs text-muted-foreground">{format(parseISO(tx.date), 'MMM do, yyyy')}</p>
                    </div>
-                   <div className={cn("font-medium text-lg", tx.type === 'income' ? 'text-accent' : 'text-foreground')}>
+                   <div className={cn("font-medium text-lg", tx.type === 'income' ? 'text-green-500' : 'text-red-500')}>
                      {tx.type === 'income' ? '+' : '-'}{currency}{Math.abs(tx.amount).toFixed(2)}
                    </div>
                  </div>
