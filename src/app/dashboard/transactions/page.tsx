@@ -13,6 +13,7 @@ import { TransactionForm } from '@/components/transactions/TransactionForm';
 import { useTransactionStore } from '@/store/transactionStore';
 import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
@@ -27,7 +28,8 @@ import {
 export default function TransactionsPage() {
   const { transactions, loading, fetchTransactions, deleteTransaction } = useTransactionStore();
   const { profile } = useProfileStore();
-  const currency = profile?.currency || 'â‚±';
+  const { t } = useLanguage();
+  const currency = profile?.currency || '₱';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterMonth, setFilterMonth] = useState('This Month');
   const [filterCategory, setFilterCategory] = useState('All Categories');
@@ -121,19 +123,19 @@ export default function TransactionsPage() {
     <div className="space-y-6 pb-20">
       <header className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">Transactions</h2>
-          <p className="text-muted-foreground mt-1 text-sm">Review your financial activity.</p>
+          <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">{t("Transactions")}</h2>
+          <p className="text-muted-foreground mt-1 text-sm">{t("Review your financial activity.")}</p>
         </div>
         <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 rounded-full px-6 py-2 shadow-md">
           <Plus className="w-4 h-4" />
-          Add Transaction
+          {t("Add Transaction")}
         </Button>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Card className="flex flex-col justify-between h-40 p-6">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">Total Spent This Month</h3>
+            <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">{t("Total Spent This Month")}</h3>
             <div className="bg-primary/10 p-2 rounded-full text-primary">
               <Wallet className="w-5 h-5" />
             </div>
@@ -151,7 +153,7 @@ export default function TransactionsPage() {
 
         <Card className="flex flex-col justify-between h-40 p-6">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">Top Category</h3>
+            <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">{t("Top Category")}</h3>
             <div className="bg-accent/10 p-2 rounded-full text-accent">
               <Tag className="w-5 h-5" />
             </div>
@@ -170,7 +172,7 @@ export default function TransactionsPage() {
 
         <Card className="flex flex-col justify-between h-40 p-6">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">Largest Expense</h3>
+            <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">{t("Largest Expense")}</h3>
             <div className="bg-destructive/10 p-2 rounded-full text-destructive">
               <Receipt className="w-5 h-5" />
             </div>
@@ -201,10 +203,10 @@ export default function TransactionsPage() {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px]">
             <DropdownMenuRadioGroup value={filterMonth} onValueChange={setFilterMonth}>
-              <DropdownMenuRadioItem value="This Month">This Month</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Last Month">Last Month</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Last 3 Months">Last 3 Months</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="All Time">All Time</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="This Month">{t("This Month")}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Last Month">{t("Last Month")}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Last 3 Months">{t("Last 3 Months")}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="All Time">{t("All Time")}</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -231,9 +233,9 @@ export default function TransactionsPage() {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px]">
             <DropdownMenuRadioGroup value={filterType} onValueChange={setFilterType}>
-              <DropdownMenuRadioItem value="All Types">All Types</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Expense">Expense</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Income">Income</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="All Types">{t("All Types")}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Expense">{t("Expense")}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="Income">{t("Income")}</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -245,11 +247,11 @@ export default function TransactionsPage() {
           <table className="w-full text-left min-w-[700px]">
             <thead>
               <tr className="border-b border-border/40 text-muted-foreground text-xs uppercase tracking-wider bg-surface/30">
-                <th className="px-6 py-4 font-semibold">Date</th>
-                <th className="px-6 py-4 font-semibold">Description</th>
-                <th className="px-6 py-4 font-semibold">Category</th>
-                <th className="px-6 py-4 font-semibold text-right">Amount</th>
-                <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                <th className="px-6 py-4 font-semibold">{t("Date")}</th>
+                <th className="px-6 py-4 font-semibold">{t("Description")}</th>
+                <th className="px-6 py-4 font-semibold">{t("Category")}</th>
+                <th className="px-6 py-4 font-semibold text-right">{t("Amount")}</th>
+                <th className="px-6 py-4 font-semibold text-right">{t("Actions")}</th>
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -263,7 +265,7 @@ export default function TransactionsPage() {
                 </>
               ) : filteredTransactions.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center text-muted-foreground py-12">No transactions found matching your filters.</td>
+                  <td colSpan={5} className="text-center text-muted-foreground py-12">{t("No transactions found matching your filters.")}</td>
                 </tr>
               ) : (
                 filteredTransactions.map((tx) => (
@@ -301,7 +303,7 @@ export default function TransactionsPage() {
                 <Skeleton key={i} className="h-24 w-full rounded-xl" />
              ))
           ) : filteredTransactions.length === 0 ? (
-             <div className="text-center text-muted-foreground py-8">No transactions found matching your filters.</div>
+             <div className="text-center text-muted-foreground py-8">{t("No transactions found matching your filters.")}</div>
           ) : (
              filteredTransactions.map((tx) => (
                <div key={tx.id} className="p-4 rounded-xl bg-surface/50 border border-border/40 flex flex-col gap-3 shadow-sm">

@@ -21,11 +21,13 @@ import { AddFundsForm } from '@/components/goals/AddFundsForm';
 import { useGoalStore } from '@/store/goalStore';
 import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import { cn } from '@/lib/utils';
 
 export default function GoalsPage() {
   const { goals, loading, fetchGoals, deleteGoal } = useGoalStore();
   const { profile } = useProfileStore();
+  const { t } = useLanguage();
   const currency = profile?.currency || '₱';
   
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
@@ -95,8 +97,8 @@ export default function GoalsPage() {
     <div className="space-y-6 pb-20">
       <header className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">Financial Goals</h2>
-          <p className="text-muted-foreground mt-1 text-sm">Track and manage your savings targets.</p>
+          <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">{t("Financial Goals")}</h2>
+          <p className="text-muted-foreground mt-1 text-sm">{t("Track and manage your savings targets.")}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Button 
@@ -104,30 +106,30 @@ export default function GoalsPage() {
             onClick={() => setShowCompleted(!showCompleted)}
             className="rounded-full"
           >
-            {showCompleted ? 'Hide Completed' : 'View Completed'}
+            {showCompleted ? t("Hide Completed") : t("View Completed")}
           </Button>
           <Button onClick={() => setIsGoalModalOpen(true)} className="flex items-center gap-2 rounded-full px-6 py-2 shadow-md">
             <Plus className="w-4 h-4" />
-            Create Goal
+            {t("Create Goal")}
           </Button>
         </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card className="flex flex-col justify-center p-8 bg-surface/30">
-          <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">Total Saved Towards Goals</h3>
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{t("Total Saved Towards Goals")}</h3>
           <div className="font-playfair text-4xl sm:text-5xl font-bold text-foreground mb-2">
             {currency}{totalSaved.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
           </div>
         </Card>
         <Card className="flex flex-col justify-center p-8 bg-surface/30">
-          <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">Active Goals</h3>
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{t("Active Goals")}</h3>
           <div className="font-playfair text-4xl sm:text-5xl font-bold text-foreground mb-3">
             {activeGoalsCount}
           </div>
           <div className="flex gap-2 flex-wrap">
-            <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">On Track: {onTrackCount}</span>
-            <span className="bg-red-500/10 text-red-500 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">Needs Attention: {needsAttentionCount}</span>
+            <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">{t("On Track")}: {onTrackCount}</span>
+            <span className="bg-red-500/10 text-red-500 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">{t("Needs Attention")}: {needsAttentionCount}</span>
           </div>
         </Card>
       </div>
@@ -170,14 +172,14 @@ export default function GoalsPage() {
                         {goal.name}
                       </h3>
                       {status === 'ON TRACK' && (
-                        <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0">On Track</span>
+                        <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0">{t("On Track")}</span>
                       )}
                       {status === 'NEEDS ATTENTION' && (
-                        <span className="bg-red-500/10 text-red-500 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0">Needs Attention</span>
+                        <span className="bg-red-500/10 text-red-500 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0">{t("Needs Attention")}</span>
                       )}
                     </div>
                     <p className="text-xs font-medium text-muted-foreground">
-                      Target Date: {goal.target_date}
+                      {t("Target Date")}: {goal.target_date}
                     </p>
                   </div>
                   <DropdownMenu>
@@ -195,14 +197,14 @@ export default function GoalsPage() {
                         setIsGoalModalOpen(true);
                       }}>
                         <Edit className="w-4 h-4 mr-2" />
-                        Edit Goal
+                        {t("Edit Goal")}
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         onClick={() => handleDelete(goal.id)}
                         className="text-destructive focus:text-destructive focus:bg-destructive/10"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
+                        {t("Delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -241,7 +243,7 @@ export default function GoalsPage() {
                   onClick={() => setAddFundsTarget(goal.id)}
                   disabled={isCompleted}
                 >
-                  {isCompleted ? 'Goal Completed' : 'Add Funds'}
+                  {isCompleted ? t("Goal Completed") : t("Add Funds")}
                 </Button>
               </Card>
             );

@@ -8,6 +8,7 @@ import { useLanguage } from "@/components/providers/LanguageProvider";
 import Image from "next/image";
 import { LayoutDashboard, ArrowLeftRight, Target, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NotificationsPopover } from "./NotificationsPopover";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -31,20 +32,23 @@ export function Sidebar() {
   return (
     <aside className="hidden w-64 flex-col border-r border-border/40 bg-surface/80 backdrop-blur-xl shadow-sm fixed left-0 top-0 h-screen z-20 md:flex">
       <div className="flex flex-col h-full py-6 px-4">
-        <div className="flex items-center px-4 mb-10 gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-surface shrink-0 relative">
-            {profile?.avatar_url ? (
-              <Image src={profile.avatar_url} alt="User Avatar" fill className="object-cover" />
-            ) : (
-              <Image src="/logo.png" alt="Pundo Logo" fill className="object-contain p-1" />
-            )}
+        <div className="flex items-center justify-between px-4 mb-10">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-surface shrink-0 relative">
+              {profile?.avatar_url ? (
+                <Image src={profile.avatar_url} alt="User Avatar" fill className="object-cover" />
+              ) : (
+                <Image src="/logo.png" alt="Pundo Logo" fill className="object-contain p-1" />
+              )}
+            </div>
+            <div className="overflow-hidden">
+              <h1 className="font-playfair text-lg font-bold text-primary tracking-tight truncate">
+                {profile?.full_name || "Pundo"}
+              </h1>
+              <p className="text-xs text-foreground/60 truncate">Your Wealth, Curated.</p>
+            </div>
           </div>
-          <div className="overflow-hidden">
-            <h1 className="font-playfair text-lg font-bold text-primary tracking-tight truncate">
-              {profile?.full_name || "Pundo"}
-            </h1>
-            <p className="text-xs text-foreground/60 truncate">Your Wealth, Curated.</p>
-          </div>
+          <NotificationsPopover />
         </div>
 
         <nav className="flex-1 flex flex-col gap-1">

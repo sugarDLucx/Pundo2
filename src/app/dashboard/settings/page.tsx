@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useProfileStore } from '@/store/profileStore';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { useNotificationStore } from '@/store/notificationStore';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -151,11 +152,13 @@ export default function SettingsPage() {
     }
   };
 
+  const { t } = useLanguage();
+
   const menuItems = [
-    { id: 'profile', label: 'Profile Information', icon: User },
-    { id: 'security', label: 'Security', icon: ShieldCheck },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'preferences', label: 'Preferences', icon: Settings2 },
+    { id: 'profile', label: t('Profile Information'), icon: User },
+    { id: 'security', label: t('Security'), icon: ShieldCheck },
+    { id: 'notifications', label: t('Notifications'), icon: Bell },
+    { id: 'preferences', label: t('Preferences'), icon: Settings2 },
   ];
 
   const inputClass = "flex h-11 w-full rounded-md border border-border/40 bg-surface/50 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -163,8 +166,8 @@ export default function SettingsPage() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-8rem)]">
       <header className="mb-8">
-        <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">Settings</h2>
-        <p className="text-muted-foreground mt-1 text-sm">Manage your account preferences, security, and notifications.</p>
+        <h2 className="font-playfair text-4xl font-bold text-primary tracking-tight">{t("Settings")}</h2>
+        <p className="text-muted-foreground mt-1 text-sm">{t("Manage your account preferences, security, and notifications.")}</p>
       </header>
 
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 flex-1 pb-32 items-start">
@@ -196,7 +199,7 @@ export default function SettingsPage() {
           {/* Profile Section */}
           <Card id="profile" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
             <div className="mb-8 border-b border-border/40 pb-4">
-              <h2 className="font-playfair text-2xl font-bold text-foreground">Profile Information</h2>
+              <h2 className="font-playfair text-2xl font-bold text-foreground">{t("Profile Information")}</h2>
             </div>
             <div className="flex flex-col md:flex-row gap-8 items-start mb-8">
               <div className="flex flex-col items-center space-y-4">
@@ -232,15 +235,15 @@ export default function SettingsPage() {
               </div>
               <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                 <div className="space-y-2">
-                  <label htmlFor="fullName" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Full Name</label>
+                  <label htmlFor="fullName" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">{t("Full Name")}</label>
                   <input id="fullName" name="fullName" autoComplete="name" className={inputClass} type="text" value={fullName} onChange={e => setFullName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Email</label>
+                  <label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">{t("Email")}</label>
                   <input id="email" name="email" className={cn(inputClass, "opacity-60 cursor-not-allowed")} type="email" value={session?.user.email || ''} disabled />
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <label htmlFor="phone" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Phone Number</label>
+                  <label htmlFor="phone" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">{t("Phone Number")}</label>
                   <input id="phone" name="phone" autoComplete="tel" className={inputClass} type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
                 </div>
               </div>
@@ -250,22 +253,22 @@ export default function SettingsPage() {
           {/* Security Section */}
           <Card id="security" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
             <div className="mb-8 border-b border-border/40 pb-4">
-              <h2 className="font-playfair text-2xl font-bold text-foreground">Security</h2>
+              <h2 className="font-playfair text-2xl font-bold text-foreground">{t("Security")}</h2>
             </div>
             <form onSubmit={handleUpdatePassword} className="space-y-4 max-w-md">
               <div className="space-y-2">
-                <label htmlFor="oldPassword" className="sr-only">Current Password</label>
-                <input id="oldPassword" name="oldPassword" autoComplete="current-password" type="password" placeholder="Current Password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className={inputClass} />
+                <label htmlFor="oldPassword" className="sr-only">{t("Current Password")}</label>
+                <input id="oldPassword" name="oldPassword" autoComplete="current-password" type="password" placeholder={t("Current Password")} value={oldPassword} onChange={e => setOldPassword(e.target.value)} className={inputClass} />
               </div>
               <div className="space-y-2">
-                <label htmlFor="newPassword" className="sr-only">New Password</label>
-                <input id="newPassword" name="newPassword" autoComplete="new-password" type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
+                <label htmlFor="newPassword" className="sr-only">{t("New Password")}</label>
+                <input id="newPassword" name="newPassword" autoComplete="new-password" type="password" placeholder={t("New Password")} value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
               </div>
               <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="sr-only">Confirm New Password</label>
-                <input id="confirmPassword" name="confirmPassword" autoComplete="new-password" type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputClass} />
+                <label htmlFor="confirmPassword" className="sr-only">{t("Confirm New Password")}</label>
+                <input id="confirmPassword" name="confirmPassword" autoComplete="new-password" type="password" placeholder={t("Confirm New Password")} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className={inputClass} />
               </div>
-              <Button type="submit" className="w-full sm:w-auto mt-2">Change Password</Button>
+              <Button type="submit" className="w-full sm:w-auto mt-2">{t("Change Password")}</Button>
             </form>
             {passwordMsg && (
               <p className={cn("mt-4 text-sm font-medium", passwordMsg.type === 'error' ? "text-destructive" : "text-green-500")}>
@@ -277,12 +280,12 @@ export default function SettingsPage() {
           {/* Notifications Section */}
           <Card id="notifications" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
             <div className="mb-6 border-b border-border/40 pb-4">
-              <h2 className="font-playfair text-2xl font-bold text-foreground">Notifications</h2>
+              <h2 className="font-playfair text-2xl font-bold text-foreground">{t("Notifications")}</h2>
             </div>
             <div className="flex items-center justify-between py-2">
               <div>
-                <h3 className="font-semibold text-foreground">Email Notifications</h3>
-                <p className="text-sm text-muted-foreground">Receive weekly summaries and goal alerts.</p>
+                <h3 className="font-semibold text-foreground">{t("Email Notifications")}</h3>
+                <p className="text-sm text-muted-foreground">{t("Receive weekly summaries and goal alerts.")}</p>
               </div>
               <button onClick={() => setEmailNotifs(!emailNotifs)} className={cn("w-12 h-6 rounded-full relative transition-colors duration-200", emailNotifs ? 'bg-primary' : 'bg-border/60')}>
                 <span className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm", emailNotifs ? 'translate-x-6' : 'translate-x-0')} />
@@ -293,7 +296,7 @@ export default function SettingsPage() {
           {/* Preferences Section */}
           <Card id="preferences" className="p-6 md:p-8 scroll-mt-24 bg-surface/30">
             <div className="mb-8 border-b border-border/40 pb-4">
-              <h2 className="font-playfair text-2xl font-bold text-foreground">Preferences</h2>
+              <h2 className="font-playfair text-2xl font-bold text-foreground">{t("Preferences")}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-border/40 mb-6">
               <motion.div 
@@ -302,7 +305,7 @@ export default function SettingsPage() {
                 transition={{ duration: 0.3 }}
                 className="space-y-2"
               >
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Language</label>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">{t("Language")}</label>
                 <DropdownMenu>
                   <DropdownMenuTrigger className={cn(inputClass, "flex items-center justify-between hover:bg-surface/70 transition-colors")}>
                     <span className="truncate">{language}</span>
@@ -327,7 +330,7 @@ export default function SettingsPage() {
                 transition={{ delay: 0.1, duration: 0.3 }}
                 className="space-y-2"
               >
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Base Currency</label>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">{t("Base Currency")}</label>
                 <DropdownMenu>
                   <DropdownMenuTrigger className={cn(inputClass, "flex items-center justify-between hover:bg-surface/70 transition-colors")}>
                     <span className="truncate">{currency === '₱' ? 'PHP (₱) - Philippine Peso' : currency === '$' ? 'USD ($) - US Dollar' : currency === '€' ? 'EUR (€) - Euro' : currency === '£' ? 'GBP (£) - British Pound' : currency === '¥' ? 'JPY (¥) - Japanese Yen' : currency === 'A$' ? 'AUD (A$) - Australian Dollar' : 'CAD (C$) - Canadian Dollar'}</span>
@@ -350,8 +353,8 @@ export default function SettingsPage() {
             
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-foreground">Dark Mode</h3>
-                <p className="text-sm text-muted-foreground">Toggle the appearance of the dashboard.</p>
+                <h3 className="font-semibold text-foreground">{t("Dark Mode")}</h3>
+                <p className="text-sm text-muted-foreground">{t("Toggle the appearance of the dashboard.")}</p>
               </div>
               <button disabled className={cn("w-12 h-6 rounded-full relative transition-colors duration-200 bg-border/60 opacity-50 cursor-not-allowed")}>
                 <span className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm translate-x-0")} />
@@ -379,7 +382,7 @@ export default function SettingsPage() {
             className="rounded-full"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
-            Reset
+            {t("Reset")}
           </Button>
           <Button 
             onClick={handleUpdateProfile}
@@ -387,7 +390,7 @@ export default function SettingsPage() {
             className="rounded-full px-6 shadow-lg"
           >
             {profileLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-            {profileLoading ? 'Saving...' : 'Save Changes'}
+            {profileLoading ? 'Saving...' : t("Save Changes")}
           </Button>
         </div>
       </div>

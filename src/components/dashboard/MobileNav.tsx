@@ -10,6 +10,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LayoutDashboard, ArrowLeftRight, Target, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NotificationsPopover } from "./NotificationsPopover";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -47,7 +48,8 @@ export function MobileNav() {
             {profile?.full_name || "Pundo"}
           </span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1 sm:space-x-2">
+          <NotificationsPopover />
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
             className="p-2 relative z-50 text-muted-foreground hover:text-foreground transition-colors"
