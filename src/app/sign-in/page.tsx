@@ -127,8 +127,8 @@ export default function SignInPage() {
               </h1>
               <p className="text-lg text-muted-foreground">
                 {step === 'login' && 'Please enter your details to access your sanctuary.'}
-                {step === 'forgot-request' && 'Enter your email to receive a 6-digit recovery code.'}
-                {step === 'forgot-verify' && 'Enter the 6-digit code we sent you and your new password.'}
+                {step === 'forgot-request' && 'Enter your email to receive a recovery code.'}
+                {step === 'forgot-verify' && 'Enter the recovery code we sent you and your new password.'}
               </p>
             </div>
 
@@ -303,16 +303,15 @@ export default function SignInPage() {
 
                 <div className="space-y-2">
                   <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="reset-token">
-                    6-Digit Code
+                    Recovery Code
                   </label>
                   <input 
                     id="reset-token" 
                     type="text" 
-                    placeholder="123456" 
+                    placeholder="Enter Code" 
                     required 
-                    maxLength={6}
                     value={resetToken}
-                    onChange={(e) => setResetToken(e.target.value)}
+                    onChange={(e) => setResetToken(e.target.value.trim())}
                     className="block w-full px-4 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-center tracking-[0.5em] text-xl font-bold focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground/30 shadow-sm hover:border-border/80"
                   />
                 </div>
