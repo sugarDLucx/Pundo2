@@ -18,6 +18,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [resetToken, setResetToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,8 +65,13 @@ export default function SignInPage() {
 
   const handleVerifyAndReset = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!resetToken || !newPassword) {
-      setError('Please enter both the code and your new password.');
+    if (!resetToken || !newPassword || !confirmNewPassword) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setError('New passwords do not match.');
       return;
     }
     
@@ -335,6 +341,26 @@ export default function SignInPage() {
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="confirm-new-password">
+                    Confirm New Password
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
+                      <Lock className="w-5 h-5" />
+                    </span>
+                    <input 
+                      id="confirm-new-password" 
+                      type={showPassword ? 'text' : 'password'} 
+                      placeholder="••••••••" 
+                      required 
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      className="block w-full pl-12 pr-12 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
+                    />
                   </div>
                 </div>
 

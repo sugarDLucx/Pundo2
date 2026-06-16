@@ -92,8 +92,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          // Fallback to a default if window is undefined, though it runs in client
-          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined
+          // Redirect directly to dashboard instead of a missing callback route
+          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : undefined
         }
       });
       if (error) throw error;
