@@ -8,10 +8,13 @@ Pundo 2.0 is a premium, beautifully designed Personal Finance Application rebuil
 
 - **Luxe Dashboard**: Drag-and-drop widget layout, beautifully animated Recharts, and quick summaries.
 - **Transactions Management**: Track income and expenses with detailed categorizations, inline forms, and clean data tables.
-- **Goal Tracking**: Create shared milestones with fully animated Framer Motion progress bars. Adding funds to a goal automatically logs a savings transaction!
+- **Goal Tracking & Unsplash Covers**: Create shared milestones with fully animated Framer Motion progress bars, customizable with stunning HD cover images powered by the **Unsplash API**. Adding funds to a goal automatically logs a savings transaction!
+- **Automated Email Triggers**: Receive congratulatory emails straight to your inbox via the **Resend API** whenever you reach your savings targets.
+- **Investments Tab**: Real-time market data tracking and searchable asset lookups powered by **yahoo-finance2**.
+- **Daily Inspiration**: Start your day right with a daily financial/motivational quote powered by the **ZenQuotes API**.
 - **Interactive Avatar Uploads**: Seamlessly upload profile pictures directly to the cloud.
 - **Secure Authentication**: Powered by Supabase Auth and Row Level Security (RLS).
-- **Glassmorphism Design**: Custom Next.js UI using Tailwind CSS with a Royal Plum & Champagne Gold aesthetic.
+- **Glassmorphism Design & Dark Mode**: Custom Next.js UI using Tailwind CSS with a Royal Plum & Champagne Gold aesthetic. Fully supports dynamic **Light/Dark Mode** toggling via `next-themes`.
 
 ## 🚀 Tech Stack
 
@@ -42,6 +45,10 @@ Create a `.env.local` file in the root of the project and add your Supabase cred
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Third-party Integrations
+UNSPLASH_ACCESS_KEY=your_unsplash_access_key
+RESEND_API_KEY=your_resend_api_key
 ```
 
 *Note: Ensure your Supabase instance has the required tables created (`transactions`, `goals`, `profiles`, etc.) and the `avatars` storage bucket configured to public.*
@@ -58,5 +65,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new).
 1. Push this repository to GitHub.
 2. Import the project into Vercel.
-3. In the Vercel dashboard, go to the project settings and add your Environment Variables (`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
+3. In the Vercel dashboard, go to the project settings and add your Environment Variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `UNSPLASH_ACCESS_KEY`, `RESEND_API_KEY`).
 4. Click Deploy!
