@@ -73,11 +73,13 @@ export default function DashboardPage() {
 
   const [layout, setLayout] = useState<string[]>(['overview', 'charts', 'goals', 'transactions']);
   const [timeframe, setTimeframe] = useState<number>(6);
+  const [isMounted, setIsMounted] = useState(false);
 
   const user = useAuthStore((state) => state.user);
   const { t } = useLanguage();
 
   useEffect(() => {
+    setIsMounted(true);
     if (user) {
       fetchTransactions();
       fetchGoals();
@@ -225,13 +227,13 @@ export default function DashboardPage() {
                   <Skeleton key={i} className="flex-1 h-3/4 rounded-t-md opacity-50" style={{ height: `${Math.random() * 60 + 20}%` }} />
                 ))}
               </div>
-            ) : (
+            ) : !isMounted ? null : (
               <ResponsiveContainer width="99%" height={300} minWidth={10} minHeight={10}>
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 12 }} />
                   <YAxis width={80} axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 12 }} tickFormatter={(val) => val >= 1000000 ? `${currency}${(val/1000000).toFixed(1)}M` : val >= 1000 ? `${currency}${(val/1000).toFixed(1)}k` : `${currency}${val}`} />
                   <Tooltip 
-                    cursor={false}
+                    cursor={{ fill: 'transparent' }}
                     content={({ active, payload, label }) => {
                       if (active && payload && payload.length) {
                         return (
@@ -264,7 +266,7 @@ export default function DashboardPage() {
               <div className="flex-1 flex items-center justify-center">
                 <Skeleton className="w-48 h-48 rounded-full opacity-50" />
               </div>
-            ) : categoryData.length > 0 ? (
+            ) : categoryData.length > 0 && isMounted ? (
               <div className="flex-1 w-full flex flex-col items-center justify-center gap-6 py-2">
                 <div className="w-full h-[180px] relative">
                   <ResponsiveContainer width="99%" height="100%" minWidth={10} minHeight={10}>
