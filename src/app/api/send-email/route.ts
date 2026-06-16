@@ -1,19 +1,25 @@
-import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 export async function POST(req: Request) {
   try {
     const { email, subject, message } = await req.json();
     
-    if (!process.env.RESEND_API_KEY) {
-      throw new Error('Resend API key is not configured');
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      throw new Error('Gmail credentials are not configured in environment variables');
     }
 
-    const data = await resend.emails.send({
-      from: 'Pundo App <onboarding@resend.dev>',
-      to: [email],
+    const mailOptions = {
+      from: `"Pundo App" <${process.env.GMAIL_USER}>`,
+      to: email,
       subject: subject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e3e2e0; border-radius: 10px;">
@@ -26,10 +32,13 @@ export async function POST(req: Request) {
           </p>
         </div>
       `
-    });
+    };
 
-    return NextResponse.json(data);
+    const data = await transporter.sendMail(mailOptions);
+
+    return NextResponse.json({ success: true, messageId: data.messageId });
   } catch (error: any) {
+    console.error('Email error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
