@@ -13,6 +13,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
 import { useLanguage } from '@/components/providers/LanguageProvider';
 import { cn } from '@/lib/utils';
+import { DailyQuote } from '@/components/dashboard/DailyQuote';
 import { 
   GripVertical, 
   Wallet, 
@@ -446,11 +447,12 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 pb-20">
-      <header className="mb-8 flex justify-between items-end">
+      <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
           <h1 className="font-playfair text-4xl font-bold text-primary tracking-tight">{t("Dashboard")}</h1>
           <p className="text-muted-foreground mt-1 text-sm">{t("Here's your fiscal health at a glance.")}</p>
         </div>
+        <DailyQuote />
       </header>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

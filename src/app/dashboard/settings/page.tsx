@@ -8,6 +8,7 @@ import { useProfileStore } from '@/store/profileStore';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useLanguage } from '@/components/providers/LanguageProvider';
+import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -35,6 +36,8 @@ export default function SettingsPage() {
   const { session, changePassword, fetchLoginHistory } = useAuthStore();
   const { profile, updateProfile, loading: profileLoading, uploadAvatar } = useProfileStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   const [activeSection, setActiveSection] = useState('profile');
   
@@ -110,6 +113,10 @@ export default function SettingsPage() {
     return () => {
       observer.current?.disconnect();
     };
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   const handleScrollTo = (id: string) => {
@@ -356,9 +363,14 @@ export default function SettingsPage() {
                 <h3 className="font-semibold text-foreground">{t("Dark Mode")}</h3>
                 <p className="text-sm text-muted-foreground">{t("Toggle the appearance of the dashboard.")}</p>
               </div>
-              <button disabled className={cn("w-12 h-6 rounded-full relative transition-colors duration-200 bg-border/60 opacity-50 cursor-not-allowed")}>
-                <span className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm translate-x-0")} />
-              </button>
+              {mounted && (
+                <button 
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
+                  className={cn("w-12 h-6 rounded-full relative transition-colors duration-200", theme === 'dark' ? 'bg-primary' : 'bg-border/60')}
+                >
+                  <span className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm", theme === 'dark' ? 'translate-x-6' : 'translate-x-0')} />
+                </button>
+              )}
             </div>
           </Card>
 

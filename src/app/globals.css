@@ -32,6 +32,33 @@
     
     --radius: 16px;
   }
+  .dark {
+    --background: #0f0d13;
+    --foreground: #f1f0f5;
+    
+    --primary: #9d4edd;
+    --primary-foreground: #ffffff;
+    --primary-container: #5b21b6;
+    
+    --secondary: #4a4548;
+    --secondary-foreground: #ffffff;
+    
+    --accent: #cca730;
+    --accent-foreground: #1a1c1a;
+    
+    --surface: #1a171f;
+    --surface-variant: #2d2836;
+    
+    --muted: #2d2836;
+    --muted-foreground: #9ca3af;
+    
+    --popover: #1a171f;
+    --popover-foreground: #f1f0f5;
+    
+    --border: #2d2836;
+    --input: #2d2836;
+    --ring: #cca730;
+  }
 }
 
 @layer base {
