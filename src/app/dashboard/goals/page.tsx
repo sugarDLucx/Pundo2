@@ -159,16 +159,16 @@ export default function GoalsPage() {
             const monthlyAmount = amountNeeded / monthsRemaining;
 
             return (
-              <Card key={goal.id} className="flex flex-col relative overflow-hidden bg-surface/50 transition-all hover:shadow-md">
+              <Card key={goal.id} className="flex flex-col relative bg-surface/50 transition-all hover:shadow-md">
                 {goal.image_url && (
-                  <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
+                  <div className="absolute inset-0 opacity-10 pointer-events-none z-0 rounded-2xl overflow-hidden">
                     <Image src={goal.image_url} alt={goal.name} fill className="object-cover" />
                   </div>
                 )}
                 
                 <div className="p-6 flex flex-col gap-6 flex-1 relative z-10">
                   {isCompleted && (
-                    <div className="absolute -top-3 -right-3 bg-accent text-accent-foreground rounded-full p-2 shadow-lg">
+                    <div className="absolute -top-3 -right-3 bg-accent text-accent-foreground rounded-full p-2 shadow-lg z-50">
                       <Trophy className="w-5 h-5" />
                     </div>
                   )}
