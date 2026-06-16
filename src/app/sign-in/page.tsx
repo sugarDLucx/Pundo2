@@ -10,14 +10,20 @@ import { cn } from '@/lib/utils';
 
 export default function SignInPage() {
   const router = useRouter();
-  const { signIn, signInWithGoogle, error: authError } = useAuthStore();
+  const { signIn, signInWithGoogle, sendPasswordResetOtp, verifyAndResetPassword, error: authError } = useAuthStore();
+  
+  const [step, setStep] = useState<'login' | 'forgot-request' | 'forgot-verify'>('login');
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [resetToken, setResetToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +37,46 @@ export default function SignInPage() {
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRequestReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      setError('Please enter your email address.');
+      return;
+    }
+    
+    setLoading(true);
+    setError('');
+    try {
+      await sendPasswordResetOtp(email);
+      setSuccessMsg(`We've sent a 6-digit code to ${email}`);
+      setStep('forgot-verify');
+    } catch (err: any) {
+      setError(err.message || 'Failed to send reset code');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyAndReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetToken || !newPassword) {
+      setError('Please enter both the code and your new password.');
+      return;
+    }
+    
+    setLoading(true);
+    setError('');
+    try {
+      await verifyAndResetPassword(email, resetToken, newPassword);
+      // It logs them in automatically, route to dashboard
+      router.push('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Invalid code or failed to reset password');
     } finally {
       setLoading(false);
     }
@@ -69,123 +115,253 @@ export default function SignInPage() {
             {/* Header */}
             <div className="space-y-4">
               <h1 className="font-playfair text-4xl lg:text-5xl font-bold text-foreground">
-                Welcome Back.
+                {step === 'login' && 'Welcome Back.'}
+                {step === 'forgot-request' && 'Reset Password.'}
+                {step === 'forgot-verify' && 'Secure Your Vault.'}
               </h1>
               <p className="text-lg text-muted-foreground">
-                Please enter your details to access your sanctuary.
+                {step === 'login' && 'Please enter your details to access your sanctuary.'}
+                {step === 'forgot-request' && 'Enter your email to receive a 6-digit recovery code.'}
+                {step === 'forgot-verify' && 'Enter the 6-digit code we sent you and your new password.'}
               </p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSignIn} className="space-y-6">
-              
-              {/* Email Input */}
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="email">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
-                    <Mail className="w-5 h-5" />
-                  </span>
-                  <input 
-                    id="email" 
-                    name="email" 
-                    type="email" 
-                    placeholder="your@email.com" 
-                    required 
-                    value={email}
-                    autoComplete="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-12 pr-4 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
-                  />
-                </div>
-              </div>
-
-              {/* Password Input */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="password">
-                    Password
+            {step === 'login' && (
+              <form onSubmit={handleSignIn} className="space-y-6">
+                
+                {/* Email Input */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="email">
+                    Email Address
                   </label>
-                  <Link href="#" className="text-xs font-semibold text-primary hover:text-accent transition-colors underline decoration-primary/30 underline-offset-4">
-                    Forgot Password?
-                  </Link>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
+                      <Mail className="w-5 h-5" />
+                    </span>
+                    <input 
+                      id="email" 
+                      name="email" 
+                      type="email" 
+                      placeholder="your@email.com" 
+                      required 
+                      value={email}
+                      autoComplete="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="block w-full pl-12 pr-4 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
+                    />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
-                    <Lock className="w-5 h-5" />
-                  </span>
-                  <input 
-                    id="password" 
-                    name="password" 
-                    type={showPassword ? 'text' : 'password'} 
-                    placeholder="••••••••" 
-                    required 
-                    value={password}
-                    autoComplete="current-password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-12 pr-12 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
-                  />
+
+                {/* Password Input */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="password">
+                      Password
+                    </label>
+                    <button type="button" onClick={() => { setStep('forgot-request'); setError(''); setSuccessMsg(''); }} className="text-xs font-semibold text-primary hover:text-accent transition-colors underline decoration-primary/30 underline-offset-4">
+                      Forgot Password?
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
+                      <Lock className="w-5 h-5" />
+                    </span>
+                    <input 
+                      id="password" 
+                      name="password" 
+                      type={showPassword ? 'text' : 'password'} 
+                      placeholder="••••••••" 
+                      required 
+                      value={password}
+                      autoComplete="current-password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="block w-full pl-12 pr-12 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                {(error || authError) && (
+                  <div className="text-sm font-medium text-destructive bg-destructive/10 p-3 rounded-lg">
+                    {error || authError}
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="pt-4 space-y-4">
+                  <button 
+                    type="submit" 
+                    disabled={loading || googleLoading}
+                    className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-primary-foreground bg-primary hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 active:scale-[0.98] disabled:opacity-70"
+                  >
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Sign In'}
+                  </button>
+                  
+                  <div className="relative flex items-center py-2">
+                    <div className="flex-grow border-t border-border/40"></div>
+                    <span className="flex-shrink-0 mx-4 text-xs font-semibold text-muted-foreground uppercase">Or continue with</span>
+                    <div className="flex-grow border-t border-border/40"></div>
+                  </div>
+
                   <button 
                     type="button" 
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                    onClick={handleGoogleSignIn}
+                    disabled={loading || googleLoading}
+                    className="w-full bg-surface border border-border/40 rounded-xl py-3 px-4 flex items-center justify-center gap-3 hover:bg-muted/50 transition-colors active:scale-[0.98] disabled:opacity-70"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {googleLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+                      </svg>
+                    )}
+                    <span className="text-xs font-bold text-foreground uppercase tracking-wider">Sign in with Google</span>
                   </button>
                 </div>
-              </div>
 
-              {/* Error Message */}
-              {(error || authError) && (
-                <div className="text-sm font-medium text-destructive bg-destructive/10 p-3 rounded-lg">
-                  {error || authError}
+                <div className="pt-4 text-center">
+                  <Link href="/sign-up" className="text-sm font-medium text-foreground hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-0.5">
+                    Don't have an account? Create one
+                  </Link>
                 </div>
-              )}
+              </form>
+            )}
 
-              {/* Actions */}
-              <div className="pt-4 space-y-4">
-                <button 
-                  type="submit" 
-                  disabled={loading || googleLoading}
-                  className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-primary-foreground bg-primary hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 active:scale-[0.98] disabled:opacity-70"
-                >
-                  {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Sign In'}
-                </button>
+            {step === 'forgot-request' && (
+              <form onSubmit={handleRequestReset} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="reset-email">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
+                      <Mail className="w-5 h-5" />
+                    </span>
+                    <input 
+                      id="reset-email" 
+                      type="email" 
+                      placeholder="your@email.com" 
+                      required 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="block w-full pl-12 pr-4 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <div className="text-sm font-medium text-destructive bg-destructive/10 p-3 rounded-lg">
+                    {error}
+                  </div>
+                )}
+
+                <div className="pt-4 space-y-4">
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-primary-foreground bg-primary hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 active:scale-[0.98] disabled:opacity-70"
+                  >
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Send Code'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => { setStep('login'); setError(''); }}
+                    className="w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  >
+                    Back to Sign In
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {step === 'forgot-verify' && (
+              <form onSubmit={handleVerifyAndReset} className="space-y-6">
                 
-                <div className="relative flex items-center py-2">
-                  <div className="flex-grow border-t border-border/40"></div>
-                  <span className="flex-shrink-0 mx-4 text-xs font-semibold text-muted-foreground uppercase">Or continue with</span>
-                  <div className="flex-grow border-t border-border/40"></div>
+                {successMsg && (
+                  <div className="text-sm font-medium text-green-500 bg-green-500/10 p-3 rounded-lg">
+                    {successMsg}
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="reset-token">
+                    6-Digit Code
+                  </label>
+                  <input 
+                    id="reset-token" 
+                    type="text" 
+                    placeholder="123456" 
+                    required 
+                    maxLength={6}
+                    value={resetToken}
+                    onChange={(e) => setResetToken(e.target.value)}
+                    className="block w-full px-4 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-center tracking-[0.5em] text-xl font-bold focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground/30 shadow-sm hover:border-border/80"
+                  />
                 </div>
 
-                <button 
-                  type="button" 
-                  onClick={handleGoogleSignIn}
-                  disabled={loading || googleLoading}
-                  className="w-full bg-surface border border-border/40 rounded-xl py-3 px-4 flex items-center justify-center gap-3 hover:bg-muted/50 transition-colors active:scale-[0.98] disabled:opacity-70"
-                >
-                  {googleLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-                  ) : (
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
-                    </svg>
-                  )}
-                  <span className="text-xs font-bold text-foreground uppercase tracking-wider">Sign in with Google</span>
-                </button>
-              </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider" htmlFor="new-password">
+                    New Password
+                  </label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
+                      <Lock className="w-5 h-5" />
+                    </span>
+                    <input 
+                      id="new-password" 
+                      type={showPassword ? 'text' : 'password'} 
+                      placeholder="••••••••" 
+                      required 
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="block w-full pl-12 pr-12 py-4 bg-surface border border-border/40 rounded-xl text-foreground text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 placeholder:text-muted-foreground shadow-sm hover:border-border/80"
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
 
-              <div className="pt-4 text-center">
-                <Link href="/sign-up" className="text-sm font-medium text-foreground hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-0.5">
-                  Don't have an account? Create one
-                </Link>
-              </div>
-            </form>
+                {error && (
+                  <div className="text-sm font-medium text-destructive bg-destructive/10 p-3 rounded-lg">
+                    {error}
+                  </div>
+                )}
+
+                <div className="pt-4 space-y-4">
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-primary-foreground bg-primary hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 active:scale-[0.98] disabled:opacity-70"
+                  >
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Reset Password'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => { setStep('login'); setError(''); setSuccessMsg(''); }}
+                    className="w-full text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  >
+                    Back to Sign In
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
 

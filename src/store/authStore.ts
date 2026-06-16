@@ -20,6 +20,8 @@ interface AuthState {
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
   fetchLoginHistory: () => Promise<void>;
   initialize: () => Promise<void>;
+  sendPasswordResetOtp: (email: string) => Promise<void>;
+  verifyAndResetPassword: (email: string, token: string, newPassword: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -166,6 +168,37 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
     } catch (e) {
       console.warn("Failed to fetch login history");
+    }
+  },
+
+  sendPasswordResetOtp: async (email) => {
+    set({ loading: true, error: null });
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      if (error) throw error;
+    } catch (error: any) {
+      set({ error: error.message });
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  verifyAndResetPassword: async (email, token, newPassword) => {
+    set({ loading: true, error: null });
+    try {
+      // 1. Verify the OTP code
+      const { error: verifyError } = await supabase.auth.verifyOtp({ email, token, type: 'recovery' });
+      if (verifyError) throw verifyError;
+      
+      // 2. Update the password (verifyOtp authenticates the user into a session)
+      const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+      if (updateError) throw updateError;
+    } catch (error: any) {
+      set({ error: error.message });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   }
 }));
