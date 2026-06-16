@@ -455,10 +455,12 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 pb-20">
-      <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-          <h1 className="font-playfair text-4xl font-bold text-primary tracking-tight">{t("Dashboard")}</h1>
-          <p className="text-muted-foreground mt-1 text-sm">{t("Here's your fiscal health at a glance.")}</p>
+      <header className="mb-8 flex flex-col gap-4">
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="font-playfair text-4xl font-bold text-primary tracking-tight">{t("Dashboard")}</h1>
+            <p className="text-muted-foreground mt-1 text-sm">{t("Here's your fiscal health at a glance.")}</p>
+          </div>
         </div>
         <DailyQuote />
       </header>
