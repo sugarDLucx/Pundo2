@@ -166,6 +166,7 @@ export default function InvestmentsPage() {
               </span>
               <button 
                 onClick={() => setShowInBaseCurrency(!showInBaseCurrency)} 
+                aria-label="Toggle Base Currency"
                 className={cn("w-10 h-5 rounded-full relative transition-colors duration-200", showInBaseCurrency ? 'bg-primary' : 'bg-border/60')}
               >
                 <span className={cn("absolute top-1 left-1 bg-white w-3 h-3 rounded-full transition-transform duration-200 shadow-sm", showInBaseCurrency ? 'translate-x-5' : 'translate-x-0')} />

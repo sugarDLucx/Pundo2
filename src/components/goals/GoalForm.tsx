@@ -137,7 +137,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
             placeholder="Search Unsplash (e.g. Vacation)"
             className={inputClass}
           />
-          <Button type="button" variant="secondary" onClick={handleSearch} disabled={searching} className="shrink-0">
+          <Button type="button" aria-label="Search Images" variant="secondary" onClick={handleSearch} disabled={searching} className="shrink-0">
             {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           </Button>
         </div>
@@ -159,7 +159,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
         {imageUrl && images.length === 0 && (
            <div className="relative aspect-video w-32 rounded-md overflow-hidden border-2 border-primary mt-2">
              <Image src={imageUrl} alt="Selected cover" fill className="object-cover" />
-             <button type="button" onClick={() => setImageUrl(undefined)} className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 flex items-center justify-center text-white text-xs hover:bg-black/80">✕</button>
+             <button type="button" aria-label="Remove Cover Image" onClick={() => setImageUrl(undefined)} className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 flex items-center justify-center text-white text-xs hover:bg-black/80">✕</button>
            </div>
         )}
       </div>

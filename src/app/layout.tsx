@@ -26,6 +26,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://pundo2.vercel.app'),
   title: "Pundo - Our Future, Managed Together",
   description: "Your exclusive financial dashboard for tracking shared milestones, date night reserves, and securing your future.",
   keywords: ["personal finance", "wealth management", "couples finance", "budgeting", "goals tracking"],
