@@ -203,6 +203,8 @@ export default function InvestmentsPage() {
                   <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <input 
                     type="text" 
+                    id="assetSearch"
+                    name="assetSearch"
                     placeholder="AAPL, TSLA, ETH-USD..." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value.toUpperCase())}
