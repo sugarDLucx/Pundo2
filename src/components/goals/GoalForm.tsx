@@ -128,6 +128,8 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
         <label className="text-sm font-medium leading-none">Cover Image (Optional)</label>
         <div className="flex gap-2">
           <input
+            id="unsplashSearch"
+            name="unsplashSearch"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

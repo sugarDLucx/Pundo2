@@ -207,6 +207,8 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center mb-6">
             <h3 className="font-playfair text-2xl font-bold text-foreground">{t("Income vs Expenses")}</h3>
             <select 
+              id="chartTimeframe"
+              name="chartTimeframe"
               value={timeframe} 
               onChange={e => setTimeframe(Number(e.target.value))}
               className="bg-background text-foreground border border-border/40 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer"
@@ -224,12 +226,12 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height={300} minWidth={10} minHeight={10}>
+              <ResponsiveContainer width="99%" height={300} minWidth={10} minHeight={10}>
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 12 }} />
                   <YAxis width={80} axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 12 }} tickFormatter={(val) => val >= 1000000 ? `${currency}${(val/1000000).toFixed(1)}M` : val >= 1000 ? `${currency}${(val/1000).toFixed(1)}k` : `${currency}${val}`} />
                   <Tooltip 
-                    cursor={{ fill: 'rgba(66, 0, 147, 0.05)' }}
+                    cursor={false}
                     content={({ active, payload, label }) => {
                       if (active && payload && payload.length) {
                         return (
@@ -265,7 +267,7 @@ export default function DashboardPage() {
             ) : categoryData.length > 0 ? (
               <div className="flex-1 w-full flex flex-col items-center justify-center gap-6 py-2">
                 <div className="w-full h-[180px] relative">
-                  <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
+                  <ResponsiveContainer width="99%" height="100%" minWidth={10} minHeight={10}>
                     <PieChart>
                       <Pie
                         data={categoryData}
