@@ -178,8 +178,8 @@ export default function TransactionsPage() {
             </div>
           </div>
           <div>
-            <div className="font-playfair text-3xl font-bold text-foreground mb-1 truncate">
-              {largestExpense ? (largestExpense.note || largestExpense.category) : '-'}
+            <div className="font-playfair text-3xl sm:text-4xl font-bold text-foreground mb-2 truncate" title={largestExpense ? (largestExpense.note || largestExpense.category) : ''}>
+              {largestExpense ? (largestExpense.note ? largestExpense.note.replace('Funded goal: ', '') : largestExpense.category) : '-'}
             </div>
             {largestExpense && (
               <span className="text-xs font-medium text-muted-foreground">
