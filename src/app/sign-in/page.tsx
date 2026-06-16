@@ -54,7 +54,7 @@ export default function SignInPage() {
     setError('');
     try {
       await sendPasswordResetOtp(email);
-      setSuccessMsg(`We've sent a 6-digit code to ${email}`);
+      setSuccessMsg(`We've sent a recovery code to ${email}`);
       setStep('forgot-verify');
     } catch (err: any) {
       setError(err.message || 'Failed to send reset code');
