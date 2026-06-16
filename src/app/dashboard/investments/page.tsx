@@ -27,11 +27,11 @@ export default function InvestmentsPage() {
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch default market indices (S&P 500, NASDAQ, Dow Jones, Bitcoin)
+  // Fetch default market indices and leading assets
   useEffect(() => {
     async function fetchIndices() {
       try {
-        const res = await fetch('/api/investments?tickers=^GSPC,^IXIC,^DJI,BTC-USD');
+        const res = await fetch('/api/investments?tickers=^GSPC,^IXIC,^DJI,BTC-USD,ETH-USD,SOL-USD,AAPL,MSFT,NVDA,AMZN,GOOGL,META');
         if (res.ok) {
           const data = await res.json();
           setMarketIndices(data.data);
@@ -101,9 +101,9 @@ export default function InvestmentsPage() {
 
       <section>
         <h2 className="font-playfair text-2xl font-bold text-foreground mb-4">{t("Market Overview")}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {loadingIndices ? (
-            Array(4).fill(0).map((_, i) => (
+            Array(12).fill(0).map((_, i) => (
               <Card key={i} className="p-6 h-36"><Skeleton className="w-full h-full" /></Card>
             ))
           ) : (
