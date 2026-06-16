@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/components/providers/LanguageProvider';
+import { useProfileStore } from '@/store/profileStore';
 import { cn } from '@/lib/utils';
 import { TrendingUp, TrendingDown, Search, Loader2, LineChart } from 'lucide-react';
 
@@ -18,6 +19,10 @@ interface Asset {
 
 export default function InvestmentsPage() {
   const { t } = useLanguage();
+  const profile = useProfileStore((state) => state.profile);
+  
+  const [showInBaseCurrency, setShowInBaseCurrency] = useState(true);
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   
   const [marketIndices, setMarketIndices] = useState<Asset[]>([]);
   const [loadingIndices, setLoadingIndices] = useState(true);
@@ -45,6 +50,39 @@ export default function InvestmentsPage() {
     fetchIndices();
   }, []);
 
+  const getCurrencyCode = (symbol: string) => {
+    switch (symbol) {
+      case '₱': return 'PHP';
+      case '€': return 'EUR';
+      case '£': return 'GBP';
+      case '¥': return 'JPY';
+      case 'A$': return 'AUD';
+      case 'C$': return 'CAD';
+      case '$': return 'USD';
+      default: return 'USD';
+    }
+  };
+
+  // Fetch exchange rate based on user's base currency
+  useEffect(() => {
+    async function fetchExchangeRate() {
+      if (!profile?.currency || profile.currency === '$') return;
+      const targetCode = getCurrencyCode(profile.currency);
+      try {
+        const res = await fetch(`/api/investments?tickers=USD${targetCode}=X`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.data && data.data.length > 0) {
+            setExchangeRate(data.data[0].regularMarketPrice);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch exchange rate', err);
+      }
+    }
+    fetchExchangeRate();
+  }, [profile?.currency]);
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
@@ -69,6 +107,24 @@ export default function InvestmentsPage() {
 
   const renderAssetCard = (asset: Asset) => {
     const isPositive = asset.regularMarketChange >= 0;
+    
+    let displayPrice = asset.regularMarketPrice;
+    let displayChange = asset.regularMarketChange;
+    let displaySymbol = asset.currency === 'USD' ? '$' : asset.currency;
+
+    if (showInBaseCurrency && profile?.currency && profile.currency !== '$' && exchangeRate !== null && asset.currency === 'USD') {
+      displayPrice = asset.regularMarketPrice * exchangeRate;
+      displayChange = asset.regularMarketChange * exchangeRate;
+      displaySymbol = profile.currency;
+    } else if (!showInBaseCurrency && profile?.currency && profile.currency !== '$' && exchangeRate !== null && asset.currency !== 'USD') {
+      // Approximate back to USD if native currency matches user base currency
+      if (asset.currency === getCurrencyCode(profile.currency)) {
+        displayPrice = asset.regularMarketPrice / exchangeRate;
+        displayChange = asset.regularMarketChange / exchangeRate;
+        displaySymbol = '$';
+      }
+    }
+
     return (
       <Card key={asset.symbol} className="p-6 bg-surface/50 border border-border/40 hover:shadow-md transition-all flex flex-col justify-between">
         <div className="flex justify-between items-start mb-4">
@@ -81,11 +137,12 @@ export default function InvestmentsPage() {
           </div>
         </div>
         <div>
-          <div className="font-playfair text-3xl font-bold text-foreground">
-            {asset.currency === 'USD' ? '$' : ''}{asset.regularMarketPrice?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          <div className="font-playfair text-3xl font-bold text-foreground flex items-baseline gap-1">
+            <span className="text-xl text-muted-foreground">{displaySymbol}</span>
+            {displayPrice?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <p className={cn("text-sm font-semibold mt-1", isPositive ? "text-green-500" : "text-red-500")}>
-            {isPositive ? '+' : ''}{asset.regularMarketChange?.toFixed(2)} ({asset.regularMarketChangePercent?.toFixed(2)}%)
+            {isPositive ? '+' : ''}{displayChange?.toFixed(2)} ({asset.regularMarketChangePercent?.toFixed(2)}%)
           </p>
         </div>
       </Card>
@@ -100,7 +157,22 @@ export default function InvestmentsPage() {
       </header>
 
       <section>
-        <h2 className="font-playfair text-2xl font-bold text-foreground mb-4">{t("Market Overview")}</h2>
+        <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
+          <h2 className="font-playfair text-2xl font-bold text-foreground">{t("Market Overview")}</h2>
+          {profile?.currency && profile.currency !== '$' && exchangeRate !== null && (
+            <div className="flex items-center gap-3 bg-surface/50 px-4 py-2 rounded-full border border-border/40">
+              <span className="text-sm font-medium text-muted-foreground">
+                {t("Show in")} {profile.currency}
+              </span>
+              <button 
+                onClick={() => setShowInBaseCurrency(!showInBaseCurrency)} 
+                className={cn("w-10 h-5 rounded-full relative transition-colors duration-200", showInBaseCurrency ? 'bg-primary' : 'bg-border/60')}
+              >
+                <span className={cn("absolute top-1 left-1 bg-white w-3 h-3 rounded-full transition-transform duration-200 shadow-sm", showInBaseCurrency ? 'translate-x-5' : 'translate-x-0')} />
+              </button>
+            </div>
+          )}
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {loadingIndices ? (
             Array(12).fill(0).map((_, i) => (
