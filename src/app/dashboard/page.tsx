@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useLanguage } from '@/components/providers/LanguageProvider';
 import { cn } from '@/lib/utils';
 import { DailyQuote } from '@/components/dashboard/DailyQuote';
+import Image from 'next/image';
 import { 
   GripVertical, 
   Wallet, 
@@ -337,21 +338,28 @@ export default function DashboardPage() {
               {goals.slice(0, 2).map((goal) => {
                 const percentage = Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100));
                 return (
-                  <div key={goal.id} className="bg-background border border-border/40 rounded-xl p-5 flex flex-col gap-4 shadow-sm">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-bold text-foreground truncate">{goal.name}</h4>
-                        <p className="text-xs text-muted-foreground mt-1 font-medium">
-                          {currency}{goal.current_amount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} / {currency}{goal.target_amount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}
-                        </p>
+                  <div key={goal.id} className="relative overflow-hidden bg-background border border-border/40 rounded-xl shadow-sm">
+                    {goal.image_url && (
+                      <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
+                        <Image src={goal.image_url} alt={goal.name} fill className="object-cover" />
                       </div>
-                      <span className="text-sm text-primary font-bold">{percentage}%</span>
-                    </div>
-                    <div className="h-2 w-full bg-primary/10 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
-                        style={{ width: `${percentage}%` }}
-                      />
+                    )}
+                    <div className="p-5 flex flex-col gap-4 relative z-10">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-bold text-foreground truncate">{goal.name}</h4>
+                          <p className="text-xs text-muted-foreground mt-1 font-medium">
+                            {currency}{goal.current_amount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} / {currency}{goal.target_amount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}
+                          </p>
+                        </div>
+                        <span className="text-sm text-primary font-bold">{percentage}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-primary/10 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" 
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
                     </div>
                   </div>
                 );

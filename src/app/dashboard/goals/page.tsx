@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { format, differenceInMonths, differenceInDays } from 'date-fns';
-import { Plus, Trophy, Calendar as CalendarIcon, Trash2, MoreHorizontal, Edit } from 'lucide-react';
+import { Plus, Trophy, Calendar as CalendarIcon, Trash2, MoreHorizontal, Edit, Image as ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 
 import {
   DropdownMenu,
@@ -158,12 +159,19 @@ export default function GoalsPage() {
             const monthlyAmount = amountNeeded / monthsRemaining;
 
             return (
-              <Card key={goal.id} className="flex flex-col gap-6 relative p-6 bg-surface/50">
-                {isCompleted && (
-                  <div className="absolute -top-3 -right-3 bg-accent text-accent-foreground rounded-full p-2 shadow-lg">
-                    <Trophy className="w-5 h-5" />
+              <Card key={goal.id} className="flex flex-col relative overflow-hidden bg-surface/50 transition-all hover:shadow-md">
+                {goal.image_url && (
+                  <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
+                    <Image src={goal.image_url} alt={goal.name} fill className="object-cover" />
                   </div>
                 )}
+                
+                <div className="p-6 flex flex-col gap-6 flex-1 relative z-10">
+                  {isCompleted && (
+                    <div className="absolute -top-3 -right-3 bg-accent text-accent-foreground rounded-full p-2 shadow-lg">
+                      <Trophy className="w-5 h-5" />
+                    </div>
+                  )}
                 
                 <div className="flex justify-between items-start">
                   <div>
@@ -237,14 +245,15 @@ export default function GoalsPage() {
                   )}
                 </div>
 
-                <Button
-                  variant={isCompleted ? "outline" : "default"}
-                  className="w-full mt-auto rounded-full"
-                  onClick={() => setAddFundsTarget(goal.id)}
-                  disabled={isCompleted}
-                >
-                  {isCompleted ? t("Goal Completed") : t("Add Funds")}
-                </Button>
+                  <Button
+                    variant={isCompleted ? "outline" : "default"}
+                    className="w-full mt-auto rounded-full"
+                    onClick={() => setAddFundsTarget(goal.id)}
+                    disabled={isCompleted}
+                  >
+                    {isCompleted ? t("Goal Completed") : t("Add Funds")}
+                  </Button>
+                </div>
               </Card>
             );
           })

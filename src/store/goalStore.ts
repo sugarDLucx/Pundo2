@@ -11,6 +11,7 @@ export interface Goal {
   target_amount: number;
   current_amount: number;
   target_date: string;
+  image_url?: string;
   created_at?: string;
 }
 
@@ -132,6 +133,22 @@ export const useGoalStore = create<GoalState>((set, get) => ({
           g.id === id ? { ...g, current_amount: newAmount } : g
         ),
       }));
+
+      // Trigger email if goal just reached its target
+      if (goal.current_amount < goal.target_amount && newAmount >= goal.target_amount) {
+        const user = useAuthStore.getState().user;
+        if (user && user.email) {
+          fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: user.email,
+              subject: `🎉 Goal Achieved: ${goal.name}`,
+              message: `Congratulations! You have successfully reached your target of ${goal.target_amount.toLocaleString()} for your goal: <strong>${goal.name}</strong>. Keep up the great work saving with Pundo!`
+            })
+          }).catch(console.error); // Fire and forget
+        }
+      }
     } catch (err: any) {
       console.error('Error adding funds to goal:', err);
       set({ error: err.message });

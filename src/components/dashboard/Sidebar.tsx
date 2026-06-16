@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useProfileStore } from "@/store/profileStore";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import Image from "next/image";
-import { LayoutDashboard, ArrowLeftRight, Target, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, ArrowLeftRight, Target, TrendingUp, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NotificationsPopover } from "./NotificationsPopover";
 
@@ -14,6 +14,7 @@ const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Transactions", href: "/dashboard/transactions", icon: ArrowLeftRight },
   { name: "Goals", href: "/dashboard/goals", icon: Target },
+  { name: "Investments", href: "/dashboard/investments", icon: TrendingUp },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
