@@ -4,6 +4,8 @@ import { useNotificationStore } from "@/store/notificationStore";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { Bell, Check, Info, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { useState } from "react";
+import { Modal } from "@/components/ui/modal";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -18,6 +20,7 @@ export function NotificationsPopover() {
   const markAllAsRead = useNotificationStore((state) => state.markAllAsRead);
   const unreadCount = useNotificationStore((state) => state.unreadCount);
   const { t } = useLanguage();
+  const [selectedNotification, setSelectedNotification] = useState<any>(null);
 
   const getIcon = (type: string) => {
     switch (type) {
@@ -64,7 +67,10 @@ export function NotificationsPopover() {
                   "p-4 border-b border-border/20 last:border-0 transition-colors cursor-pointer flex gap-3",
                   !notif.is_read ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-surface/50'
                 )}
-                onClick={() => markAsRead(notif.id)}
+                onClick={() => {
+                  markAsRead(notif.id);
+                  setSelectedNotification(notif);
+                }}
               >
                 <div className="flex-shrink-0 mt-0.5">
                   {getIcon(notif.type)}
@@ -87,6 +93,24 @@ export function NotificationsPopover() {
           )}
         </div>
       </DropdownMenuContent>
+      
+      <Modal 
+        isOpen={!!selectedNotification} 
+        onClose={() => setSelectedNotification(null)}
+        title={selectedNotification?.title || t("Notification")}
+      >
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-3 text-muted-foreground mb-2 pb-4 border-b border-border/40">
+            {selectedNotification && getIcon(selectedNotification.type)}
+            <span className="text-sm font-medium">
+              {selectedNotification && formatDistanceToNow(new Date(selectedNotification.created_at), { addSuffix: true })}
+            </span>
+          </div>
+          <p className="text-foreground text-base leading-relaxed whitespace-pre-wrap">
+            {selectedNotification?.message}
+          </p>
+        </div>
+      </Modal>
     </DropdownMenu>
   );
 }

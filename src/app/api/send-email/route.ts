@@ -18,9 +18,11 @@ export async function POST(req: Request) {
     }
 
     const mailOptions = {
-      from: `"Pundo App" <${process.env.GMAIL_USER}>`,
+      from: `"Pundo Notifications" <${process.env.GMAIL_USER}>`,
       to: email,
+      replyTo: process.env.GMAIL_USER,
       subject: subject,
+      text: `${subject}\n\n${message}\n\n© ${new Date().getFullYear()} Pundo. Your Wealth, Curated.`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e3e2e0; border-radius: 10px;">
           <h1 style="color: #420093; text-align: center;">Pundo Updates</h1>
