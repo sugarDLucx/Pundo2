@@ -29,8 +29,8 @@ export async function POST(req: Request) {
       apiKey,
     });
 
-    const result = streamText({
-      model: google('gemini-3.5-flash'),
+    const result = await streamText({
+      model: google('gemini-3.1-flash-lite'),
       messages: sanitizedMessages,
       system: `You are the "Pundo Financial Assistant". You are an expert financial advisor integrated into the Pundo app. 
 Pundo is an elegant, premium financial dashboard where users track their wealth, set savings goals, manage transactions, and view market investments.
