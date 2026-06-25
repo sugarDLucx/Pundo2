@@ -276,6 +276,7 @@ export default function SettingsPage() {
               <div className="space-y-2">
                 <label htmlFor="newPassword" className="sr-only">{t("New Password")}</label>
                 <input id="newPassword" name="newPassword" autoComplete="new-password" type="password" placeholder={t("New Password")} value={newPassword} onChange={e => setNewPassword(e.target.value)} className={inputClass} />
+                <p className="text-xs text-muted-foreground mt-1">Must be at least 8 characters and include uppercase, lowercase, digits, and symbols.</p>
               </div>
               <div className="space-y-2">
                 <label htmlFor="confirmPassword" className="sr-only">{t("Confirm New Password")}</label>

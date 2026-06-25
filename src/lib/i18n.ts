@@ -74,12 +74,12 @@ export const translations: Record<string, Record<string, string>> = {
     "Log out": "Log out",
     "from last month": "from last month",
     "transactions": "transactions",
-    "Add Transaction": "Add Transaction",
-    "Edit Goal": "Edit Goal",
+
+
     "Create New Goal": "Create New Goal",
     "No goals found. Create one to start saving!": "No goals found. Create one to start saving!",
     "No active goals. You can view your completed goals.": "No active goals. You can view your completed goals.",
-    "Add Funds": "Add Funds",
+
     "Login History": "Login History",
     "Recent sign-in activity on your account.": "Recent sign-in activity on your account.",
     "No login history available.": "No login history available.",

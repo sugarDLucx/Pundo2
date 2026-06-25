@@ -352,6 +352,7 @@ export default function SignInPage() {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
+                  <p className="text-xs text-muted-foreground mt-1">Must be at least 8 characters and include uppercase, lowercase, digits, and symbols.</p>
                 </div>
 
                 <div className="space-y-2">

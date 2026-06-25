@@ -16,15 +16,13 @@ export function AIChatbot() {
   
   const [input, setInput] = useState('');
   
-  const transport = React.useMemo(() => new HttpChatTransport({ api: '/api/chat' }), []);
   const { messages, sendMessage, status } = useChat({
-    transport,
-    initialMessages: [
+    messages: [
       {
         id: 'welcome-message',
         role: 'assistant',
-        content: 'Hello! I am your Pundo Financial Assistant. How can I help you curate your wealth today?'
-      }
+        parts: [{ type: 'text', text: 'Hello! I am your Pundo Financial Assistant. How can I help you curate your wealth today?' }]
+      } as any
     ]
   });
 
@@ -32,10 +30,10 @@ export function AIChatbot() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-    sendMessage({ role: 'user', content: input });
+    sendMessage({ role: 'user', parts: [{ type: 'text', text: input }] } as any);
     setInput('');
   };
-  const isLoading = status === 'in_progress' || status === 'submitted';
+  const isLoading = status === 'streaming' || status === 'submitted';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -122,7 +120,7 @@ export function AIChatbot() {
                           ? "bg-primary text-primary-foreground rounded-tr-sm" 
                           : "bg-secondary/20 text-foreground border border-border/40 rounded-tl-sm"
                       )}>
-                        {m.content}
+                        {m.parts?.map((part: any, i: number) => part.type === 'text' ? <span key={i}>{part.text}</span> : null)}
                       </div>
                     </div>
                   ))}
