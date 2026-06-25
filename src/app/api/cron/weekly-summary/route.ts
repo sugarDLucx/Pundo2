@@ -88,7 +88,7 @@ export async function GET(req: Request) {
       `;
 
       await transporter.sendMail({
-        from: \`"Pundo Updates" <\${process.env.GMAIL_USER}>\`,
+        from: `"Pundo Updates" <${process.env.GMAIL_USER}>`,
         to: user.email,
         subject: 'Your Pundo Weekly Summary',
         html: htmlContent
