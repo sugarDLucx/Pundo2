@@ -2,6 +2,7 @@
 import { create } from 'zustand';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../services/supabase';
+import { useNotificationStore } from './notificationStore';
 
 interface AuthState {
   user: User | null;
@@ -74,13 +75,21 @@ export const useAuthStore = create<AuthState>((set) => ({
       // Log history
       if (data.session?.user) {
         try {
-          // Attempt to log IP and user agent (basic info, IP might need a proxy edge function, but we'll store basic agent for now)
-          await supabase.from('login_history').insert([{
+          // Attempt to log IP and user agent
+          const { error: insertError } = await supabase.from('login_history').insert([{
             user_id: data.session.user.id,
-            user_agent: navigator.userAgent
+            user_agent: navigator.userAgent || 'Unknown'
           }]);
+          if (insertError) {
+            console.error("Login history insert error:", insertError);
+            useNotificationStore.getState().addNotification(
+              "Login History Error",
+              "Database error: " + insertError.message,
+              "error"
+            );
+          }
         } catch (e) {
-          console.warn("Failed to log login history (table might not exist yet)");
+          console.warn("Failed to log login history", e);
         }
       }
     } catch (error: any) {

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { useGoalStore, Goal } from '@/store/goalStore';
 import { useNotificationStore } from '@/store/notificationStore';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import Image from 'next/image';
 import { Search, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -19,6 +20,7 @@ interface GoalFormProps {
 export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCancel }) => {
   const { addGoal, updateGoal } = useGoalStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
+  const { t } = useLanguage();
   
   const [name, setName] = useState(initialData?.name || '');
   const [targetAmount, setTargetAmount] = useState(initialData?.target_amount?.toString() || '');
@@ -89,14 +91,14 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <label htmlFor="goalName" className="text-sm font-medium leading-none">Goal Name</label>
+        <label htmlFor="goalName" className="text-sm font-medium leading-none">{t("Goal Name")}</label>
         <input
           id="goalName"
           name="goalName"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. New Car, Emergency Fund"
+          placeholder={t("e.g. New Car, Emergency Fund")}
           required
           autoComplete="off"
           className={inputClass}
@@ -104,7 +106,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="targetAmount" className="text-sm font-medium leading-none">Target Amount</label>
+        <label htmlFor="targetAmount" className="text-sm font-medium leading-none">{t("Target Amount")}</label>
         <input
           id="targetAmount"
           name="targetAmount"
@@ -120,12 +122,12 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none">Target Date</label>
+        <label className="text-sm font-medium leading-none">{t("Target Date")}</label>
         <DatePicker value={targetDate} onChange={setTargetDate} />
       </div>
 
       <div className="space-y-2 pt-2">
-        <label className="text-sm font-medium leading-none">Cover Image (Optional)</label>
+        <label className="text-sm font-medium leading-none">{t("Cover Image (Optional)")}</label>
         <div className="flex gap-2">
           <input
             id="unsplashSearch"
@@ -134,10 +136,10 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearch())}
-            placeholder="Search Unsplash (e.g. Vacation)"
+            placeholder={t("Search Unsplash (e.g. Vacation)")}
             className={inputClass}
           />
-          <Button type="button" aria-label="Search Images" variant="secondary" onClick={handleSearch} disabled={searching} className="shrink-0">
+          <Button type="button" aria-label={t("Search Images")} variant="secondary" onClick={handleSearch} disabled={searching} className="shrink-0">
             {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           </Button>
         </div>
@@ -158,8 +160,8 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
 
         {imageUrl && images.length === 0 && (
            <div className="relative aspect-video w-32 rounded-md overflow-hidden border-2 border-primary mt-2">
-             <Image src={imageUrl} alt="Selected cover" fill className="object-cover" />
-             <button type="button" aria-label="Remove Cover Image" onClick={() => setImageUrl(undefined)} className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 flex items-center justify-center text-white text-xs hover:bg-black/80">✕</button>
+             <Image src={imageUrl} alt={t("Selected cover")} fill className="object-cover" />
+             <button type="button" aria-label={t("Remove Cover Image")} onClick={() => setImageUrl(undefined)} className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 flex items-center justify-center text-white text-xs hover:bg-black/80">✕</button>
            </div>
         )}
       </div>
@@ -169,11 +171,11 @@ export const GoalForm: React.FC<GoalFormProps> = ({ initialData, onSuccess, onCa
       <div className="flex justify-end space-x-3 pt-4">
         {onCancel && (
           <Button type="button" variant="ghost" onClick={onCancel} disabled={loading}>
-            Cancel
+            {t("Cancel")}
           </Button>
         )}
         <Button type="submit" disabled={loading}>
-          {loading ? 'Saving...' : initialData ? 'Save Changes' : 'Create Goal'}
+          {loading ? t('Saving...') : initialData ? t('Save Changes') : t('Create Goal')}
         </Button>
       </div>
     </form>
