@@ -16,7 +16,7 @@ export function AIChatbot() {
   
   const [input, setInput] = useState('');
   
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     messages: [
       {
         id: 'welcome-message',
@@ -128,7 +128,14 @@ export function AIChatbot() {
                     <div className="flex justify-start">
                       <div className="bg-secondary/20 border border-border/40 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
                         <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground font-medium">Thinking...</span>
+                        <span className="text-xs text-muted-foreground font-medium">{t("Thinking...")}</span>
+                      </div>
+                    </div>
+                  )}
+                  {error && (
+                    <div className="flex justify-center p-2">
+                      <div className="bg-red-500/10 text-red-500 text-xs px-3 py-1 rounded-md border border-red-500/20 text-center">
+                        {t("Connection Error:")} {error.message || t("Failed to reach AI.")}
                       </div>
                     </div>
                   )}
