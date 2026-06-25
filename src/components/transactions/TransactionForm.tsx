@@ -7,6 +7,7 @@ import { DatePicker } from '../ui/date-picker';
 import { useTransactionStore } from '../../store/transactionStore';
 import type { TransactionType } from '../../store/transactionStore';
 import { useNotificationStore } from '../../store/notificationStore';
+import { useLanguage } from '../providers/LanguageProvider';
 
 interface TransactionFormProps {
   onSuccess?: () => void;
@@ -21,12 +22,13 @@ const CATEGORY_OPTIONS = [
   { value: 'Entertainment', label: 'Entertainment' },
   { value: 'Utilities', label: 'Utilities' },
   { value: 'Health', label: 'Health' },
-  { value: 'Other', label: 'Other' },
+  { value: 'Others', label: 'Others' },
 ];
 
 export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onCancel }) => {
   const addTransaction = useTransactionStore((state) => state.addTransaction);
   const addNotification = useNotificationStore((state) => state.addNotification);
+  const { t } = useLanguage();
   
   const [type, setType] = useState<TransactionType>('expense');
   const [amount, setAmount] = useState('');
@@ -79,7 +81,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
             type === 'expense' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-foreground/70 hover:text-foreground hover:bg-border/40'
           }`}
         >
-          Expense
+          {t('Expense')}
         </button>
         <button
           type="button"
@@ -88,12 +90,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
             type === 'income' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-foreground/70 hover:text-foreground hover:bg-border/40'
           }`}
         >
-          Income
+          {t('Income')}
         </button>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="amount" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Amount</label>
+        <label htmlFor="amount" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{t('Amount')}</label>
         <input
           id="amount"
           name="amount"
@@ -109,7 +111,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="category" className="text-sm font-medium leading-none">Category</label>
+        <label htmlFor="category" className="text-sm font-medium leading-none">{t('Category')}</label>
         <select
           id="category"
           name="category"
@@ -119,18 +121,18 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
           className={inputClass}
         >
           {CATEGORY_OPTIONS.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>{t(opt.label)}</option>
           ))}
         </select>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium leading-none">Date</label>
+        <label className="text-sm font-medium leading-none">{t('Date')}</label>
         <DatePicker value={date} onChange={setDate} />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="note" className="text-sm font-medium leading-none">Note (Optional)</label>
+        <label htmlFor="note" className="text-sm font-medium leading-none">{t('Note (Optional)')}</label>
         <input
           id="note"
           name="note"
@@ -148,11 +150,11 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, onC
       <div className="flex justify-end space-x-3 pt-4">
         {onCancel && (
           <Button type="button" variant="ghost" onClick={onCancel} disabled={loading}>
-            Cancel
+            {t('Cancel')}
           </Button>
         )}
         <Button type="submit" disabled={loading}>
-          {loading ? 'Saving...' : 'Save Transaction'}
+          {loading ? 'Saving...' : t('Save Transaction')}
         </Button>
       </div>
     </form>
