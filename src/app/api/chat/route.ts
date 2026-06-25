@@ -4,8 +4,14 @@ import { NextResponse } from 'next/server';
 
 export const maxDuration = 30;
 
+import { checkBotId } from 'botid/server';
+
 export async function POST(req: Request) {
   try {
+    const verification = await checkBotId();
+    if (verification.isBot) {
+      return NextResponse.json({ error: 'Bot detected. Access denied.' }, { status: 403 });
+    }
     const { messages } = await req.json();
 
     if (!process.env.GOOGLE_API_KEY) {

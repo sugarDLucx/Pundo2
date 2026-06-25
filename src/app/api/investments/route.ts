@@ -3,7 +3,14 @@ import YahooFinance from 'yahoo-finance2';
 
 const yahooFinance = new YahooFinance();
 
+import { checkBotId } from 'botid/server';
+
 export async function GET(request: Request) {
+  const verification = await checkBotId();
+  if (verification.isBot) {
+    return NextResponse.json({ error: 'Bot detected. Access denied.' }, { status: 403 });
+  }
+
   const { searchParams } = new URL(request.url);
   const tickers = searchParams.get('tickers');
 

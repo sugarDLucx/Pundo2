@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useChat } from '@ai-sdk/react';
+import { HttpChatTransport } from 'ai';
 import { Bot, X, Send, Loader2, Minimize2, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -14,8 +15,10 @@ export function AIChatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const [input, setInput] = useState('');
+  
+  const transport = React.useMemo(() => new HttpChatTransport({ api: '/api/chat' }), []);
   const { messages, sendMessage, status } = useChat({
-    api: '/api/chat',
+    transport,
     initialMessages: [
       {
         id: 'welcome-message',
