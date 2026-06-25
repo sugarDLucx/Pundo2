@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | undefined>();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +37,7 @@ export default function SignUpPage() {
     setError('');
     
     try {
-      await signUp(email, password, fullName);
+      await signUp(email, password, fullName, captchaToken);
       // Depending on Supabase settings, this might log them in, or require email verification.
       // Usually, if auto-confirm is enabled, they are logged in.
       // Let's redirect to sign-in or dashboard based on typical flows. 
@@ -164,6 +166,15 @@ export default function SignUpPage() {
               )}
 
               {/* Submit Button */}
+              {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                <div className="flex justify-center mt-4">
+                  <Turnstile
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                    onSuccess={(token) => setCaptchaToken(token)}
+                  />
+                </div>
+              )}
+              
               <button 
                 type="submit" 
                 disabled={loading || googleLoading}

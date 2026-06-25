@@ -143,7 +143,7 @@ export default function GoalsPage() {
           </>
         ) : filteredGoals.length === 0 ? (
           <div className="col-span-full py-12 text-center text-muted-foreground">
-            {goals.length === 0 ? 'No goals found. Create one to start saving!' : 'No active goals. You can view your completed goals.'}
+            {goals.length === 0 ? t('No goals found. Create one to start saving!') : t('No active goals. You can view your completed goals.')}
           </div>
         ) : (
           filteredGoals.map((goal) => {
@@ -267,7 +267,7 @@ export default function GoalsPage() {
             setIsGoalModalOpen(false);
             setEditingGoal(null);
           }} 
-          title={editingGoal ? "Edit Goal" : "Create New Goal"}
+          title={editingGoal ? t("Edit Goal") : t("Create New Goal")}
         >
           <GoalForm 
             initialData={editingGoal}
@@ -286,7 +286,7 @@ export default function GoalsPage() {
       <Modal
         isOpen={!!addFundsTarget}
         onClose={() => setAddFundsTarget(null)}
-        title="Add Funds to Goal"
+        title={t("Add Funds")}
       >
         {addFundsTarget && (
           <AddFundsForm 

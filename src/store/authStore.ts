@@ -13,8 +13,8 @@ interface AuthState {
   setUser: (user: User | null) => void;
   setSession: (session: Session | null) => void;
   setLoading: (loading: boolean) => void;
-  signUp: (email: string, password: string, fullName?: string) => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName?: string, captchaToken?: string) => Promise<void>;
+  signIn: (email: string, password: string, captchaToken?: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
@@ -35,9 +35,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   setSession: (session) => set({ session }),
   setLoading: (loading) => set({ loading }),
 
-  signUp: async (email, password, fullName) => {
+  signUp: async (email, password, fullName, captchaToken) => {
     set({ loading: true, error: null });
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: captchaToken ? { captchaToken } : undefined
+    });
     if (error) {
       set({ error: error.message, loading: false });
       throw error;
@@ -57,12 +61,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: false });
   },
 
-  signIn: async (email, password) => {
+  signIn: async (email, password, captchaToken) => {
     set({ loading: true, error: null });
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
+        options: captchaToken ? { captchaToken } : undefined
       });
       if (error) throw error;
       

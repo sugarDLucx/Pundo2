@@ -105,7 +105,7 @@ export function MobileNav() {
                     className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors text-sm font-medium"
                   >
                     <LogOut className="h-5 w-5" />
-                    <span>Log out</span>
+                    <span>{t("Log out")}</span>
                   </button>
                 </div>
               </div>

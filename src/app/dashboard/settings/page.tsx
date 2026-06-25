@@ -21,9 +21,13 @@ import {
   Loader2,
   Save,
   RefreshCw,
-  ChevronDown
+  ChevronDown,
+  History,
+  MonitorSmartphone
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { format } from 'date-fns';
+import { Modal } from '@/components/ui/modal';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -33,7 +37,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export default function SettingsPage() {
-  const { session, changePassword, fetchLoginHistory } = useAuthStore();
+  const { session, changePassword, fetchLoginHistory, loginHistory } = useAuthStore();
   const { profile, updateProfile, loading: profileLoading, uploadAvatar } = useProfileStore();
   const addNotification = useNotificationStore((state) => state.addNotification);
   const { theme, setTheme } = useTheme();
@@ -54,6 +58,8 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMsg, setPasswordMsg] = useState<{ type: 'error' | 'success', text: string } | null>(null);
+
+  const [showLoginHistoryModal, setShowLoginHistoryModal] = useState(false);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -282,6 +288,45 @@ export default function SettingsPage() {
                 {passwordMsg.text}
               </p>
             )}
+
+            <div className="mt-12 pt-8 border-t border-border/40">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className="font-playfair text-xl font-bold text-foreground flex items-center gap-2">
+                    <History className="w-5 h-5 text-primary" />
+                    {t("Login History")}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">{t("Recent sign-in activity on your account.")}</p>
+                </div>
+                {loginHistory.length > 3 && (
+                  <Button variant="outline" size="sm" onClick={() => setShowLoginHistoryModal(true)} className="rounded-full">
+                    {t("View All")}
+                  </Button>
+                )}
+              </div>
+
+              {loginHistory.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t("No login history available.")}</p>
+              ) : (
+                <div className="space-y-4">
+                  {loginHistory.slice(0, 3).map((log, i) => (
+                    <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-surface/50 border border-border/40">
+                      <div className="p-2 bg-primary/10 text-primary rounded-lg shrink-0">
+                        <MonitorSmartphone className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-foreground text-sm truncate" title={log.user_agent || 'Unknown Device'}>
+                          {log.user_agent || 'Unknown Device'}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {format(new Date(log.created_at), 'MMM do, yyyy • h:mm a')}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </Card>
 
           {/* Notifications Section */}
@@ -406,6 +451,30 @@ export default function SettingsPage() {
           </Button>
         </div>
       </div>
+
+      <Modal 
+        isOpen={showLoginHistoryModal} 
+        onClose={() => setShowLoginHistoryModal(false)}
+        title={t("All Login History")}
+      >
+        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2 no-scrollbar">
+          {loginHistory.map((log, i) => (
+            <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-surface/50 border border-border/40">
+              <div className="p-2 bg-primary/10 text-primary rounded-lg shrink-0">
+                <MonitorSmartphone className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-foreground text-sm truncate" title={log.user_agent || 'Unknown Device'}>
+                  {log.user_agent || 'Unknown Device'}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {format(new Date(log.created_at), 'MMM do, yyyy • h:mm a')}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 }

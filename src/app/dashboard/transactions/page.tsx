@@ -146,7 +146,7 @@ export default function TransactionsPage() {
             </div>
             <span className={cn("text-xs font-medium flex items-center gap-1", spentChangeColor)}>
               {isSpentUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-              {Math.abs(spentPercentageChange).toFixed(0)}% from last month
+              {Math.abs(spentPercentageChange).toFixed(0)}% {t("from last month")}
             </span>
           </div>
         </Card>
@@ -164,7 +164,7 @@ export default function TransactionsPage() {
             </div>
             {topCategory !== '-' && (
               <span className="text-xs font-medium text-muted-foreground">
-                {topCategoryStats.count} transactions ({currency}{topCategoryStats.amount.toFixed(2)})
+                {topCategoryStats.count} {t("transactions")} ({currency}{topCategoryStats.amount.toFixed(2)})
               </span>
             )}
           </div>
@@ -340,7 +340,7 @@ export default function TransactionsPage() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Add Transaction"
+        title={t("Add Transaction")}
       >
         <TransactionForm
           onSuccess={() => setIsModalOpen(false)}

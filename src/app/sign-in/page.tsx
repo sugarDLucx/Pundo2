@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function SignInPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | undefined>();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ export default function SignInPage() {
     setError('');
     
     try {
-      await signIn(email, password);
+      await signIn(email, password, captchaToken);
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
@@ -203,6 +205,15 @@ export default function SignInPage() {
 
                 {/* Actions */}
                 <div className="pt-4 space-y-4">
+                  {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                    <div className="flex justify-center">
+                      <Turnstile
+                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                        onSuccess={(token) => setCaptchaToken(token)}
+                      />
+                    </div>
+                  )}
+
                   <button 
                     type="submit" 
                     disabled={loading || googleLoading}

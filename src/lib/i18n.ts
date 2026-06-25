@@ -70,7 +70,22 @@ export const translations: Record<string, Record<string, string>> = {
     "Toggle the appearance of the dashboard.": "Toggle the appearance of the dashboard.",
     "Reset": "Reset",
     "Save Changes": "Save Changes",
-    "No notifications yet": "No notifications yet"
+    "No notifications yet": "No notifications yet",
+    "Log out": "Log out",
+    "from last month": "from last month",
+    "transactions": "transactions",
+    "Add Transaction": "Add Transaction",
+    "Edit Goal": "Edit Goal",
+    "Create New Goal": "Create New Goal",
+    "No goals found. Create one to start saving!": "No goals found. Create one to start saving!",
+    "No active goals. You can view your completed goals.": "No active goals. You can view your completed goals.",
+    "Add Funds": "Add Funds",
+    "Login History": "Login History",
+    "Recent sign-in activity on your account.": "Recent sign-in activity on your account.",
+    "No login history available.": "No login history available.",
+    "All Login History": "All Login History",
+    "Ask Pundo AI": "Ask Pundo AI",
+    "Ask about your finances...": "Ask about your finances..."
   },
   "English (United Kingdom)": {
     "Dashboard": "Dashboard",
