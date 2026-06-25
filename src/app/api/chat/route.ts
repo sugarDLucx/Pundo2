@@ -24,17 +24,13 @@ export async function POST(req: Request) {
     if (!apiKey) {
       return NextResponse.json({ error: 'Google API key is not configured.' }, { status: 500 });
     }
-    
-    if (!apiKey.startsWith('AIza')) {
-      return NextResponse.json({ error: 'Invalid Google Gemini API Key. It must start with "AIza". Please get a valid key from Google AI Studio.' }, { status: 500 });
-    }
 
     const google = createGoogleGenerativeAI({
       apiKey,
     });
 
     const result = streamText({
-      model: google('gemini-pro'),
+      model: google('gemini-3.5-flash'),
       messages: sanitizedMessages,
       system: `You are the "Pundo Financial Assistant". You are an expert financial advisor integrated into the Pundo app. 
 Pundo is an elegant, premium financial dashboard where users track their wealth, set savings goals, manage transactions, and view market investments.
