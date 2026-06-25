@@ -7,6 +7,8 @@ import { Bot, X, Send, Loader2, Minimize2, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/components/providers/LanguageProvider';
+import { useTransactionStore } from '@/store/transactionStore';
+import { useGoalStore } from '@/store/goalStore';
 
 export function AIChatbot() {
   const { t } = useLanguage();
@@ -16,7 +18,17 @@ export function AIChatbot() {
   
   const [input, setInput] = useState('');
   
+  const transactions = useTransactionStore((state) => state.transactions);
+  const goals = useGoalStore((state) => state.goals);
+
   const { messages, sendMessage, status, error } = useChat({
+    api: '/api/chat',
+    body: {
+      financialContext: {
+        transactions: transactions.slice(0, 50),
+        goals: goals,
+      }
+    },
     messages: [
       {
         id: 'welcome-message',

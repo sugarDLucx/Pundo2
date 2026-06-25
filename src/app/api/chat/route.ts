@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     if (verification.isBot) {
       return NextResponse.json({ error: 'Bot detected. Access denied.' }, { status: 403 });
     }
-    const { messages } = await req.json();
+    const { messages, financialContext } = await req.json();
 
     // Sanitize messages for Vercel AI SDK Core (it expects 'content', not 'parts')
     const sanitizedMessages = messages.map((m: any) => ({
@@ -32,10 +32,14 @@ export async function POST(req: Request) {
     const result = await streamText({
       model: google('gemini-3.1-flash-lite'),
       messages: sanitizedMessages,
-      system: `You are the "Pundo Financial Assistant". You are an expert financial advisor integrated into the Pundo app. 
+        system: `You are the "Pundo Financial Assistant". You are an expert financial advisor integrated into the Pundo app. 
 Pundo is an elegant, premium financial dashboard where users track their wealth, set savings goals, manage transactions, and view market investments.
 Your job is to provide helpful, concise, and professional financial advice. Do not provide specific stock picks or guarantee returns. Focus on budgeting, saving strategies, interpreting market trends, and navigating the Pundo application.
-Keep your responses relatively brief unless the user asks for a detailed plan.`
+Keep your responses relatively brief unless the user asks for a detailed plan.
+
+Here is the user's current financial data context (use this to provide personalized advice when relevant):
+${financialContext ? JSON.stringify(financialContext, null, 2) : 'No financial data available yet.'}
+`
     });
 
     return result.toUIMessageStreamResponse();
