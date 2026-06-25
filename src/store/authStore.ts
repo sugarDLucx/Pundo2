@@ -72,26 +72,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
       if (error) throw error;
       
-      // Log history
-      if (data.session?.user) {
-        try {
-          // Attempt to log IP and user agent
-          const { error: insertError } = await supabase.from('login_history').insert([{
-            user_id: data.session.user.id,
-            user_agent: navigator.userAgent || 'Unknown'
-          }]);
-          if (insertError) {
-            console.error("Login history insert error:", insertError);
-            useNotificationStore.getState().addNotification(
-              "Login History Error",
-              "Database error: " + insertError.message,
-              "error"
-            );
-          }
-        } catch (e) {
-          console.warn("Failed to log login history", e);
-        }
-      }
     } catch (error: any) {
       set({ error: error.message });
       throw error;
@@ -125,8 +105,27 @@ export const useAuthStore = create<AuthState>((set) => ({
       if (error) throw error;
       set({ session, user: session?.user || null, initialized: true, loading: false });
 
-      supabase.auth.onAuthStateChange((_event, session) => {
+      supabase.auth.onAuthStateChange(async (event, session) => {
         set({ session, user: session?.user || null });
+        
+        if (event === 'SIGNED_IN' && session?.user) {
+          try {
+            const { error: insertError } = await supabase.from('login_history').insert([{
+              user_id: session.user.id,
+              user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown'
+            }]);
+            if (insertError) {
+              console.error("Login history insert error:", insertError);
+              useNotificationStore.getState().addNotification(
+                "Login History Error",
+                "Database error: " + insertError.message,
+                "error"
+              );
+            }
+          } catch (e) {
+            console.warn("Failed to log login history", e);
+          }
+        }
       });
     } catch (error) {
       console.error('Error fetching session:', error);
