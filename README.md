@@ -7,7 +7,8 @@ Pundo V2.1.0 is a premium, beautifully designed Personal Finance Application bui
 ## ✨ What's New in V2.1.0 (The Major Update)
 
 - **🤖 AI Financial Assistant**: An integrated Google Gemini-powered AI Chatbot that lives right in your dashboard to help you curate your wealth, analyze your budget, and guide you through the app.
-- **🛡️ Invisible Captcha**: Cloudflare Turnstile integration ensures absolute security during Sign-In and Sign-Up without annoying traffic-light puzzles.
+- **🛡️ BotID & Invisible Captcha**: Integrated BotID for comprehensive endpoint protection against malicious bots, alongside Cloudflare Turnstile for absolute security during Sign-In and Sign-Up without annoying traffic-light puzzles.
+- **🔐 Strict Password Security**: Enhanced security requirements enforcing 8+ characters, uppercase, lowercase, numbers, and symbols.
 - **✉️ Weekly Financial Summary**: Automated cron jobs send out beautifully crafted email summaries every Sunday detailing your week's income, expenses, and net flow.
 - **🔐 Login History UI**: Track your active sessions and device history directly from your Security Settings.
 - **🌍 Complete Localization (i18n)**: 100% of the dashboard is fully translatable. Switch between English, Spanish, Tagalog, and more seamlessly without reloading the page.
@@ -25,11 +26,11 @@ Pundo V2.1.0 is a premium, beautifully designed Personal Finance Application bui
 
 ## 🚀 Tech Stack
 
-- **Framework:** [Next.js 14](https://nextjs.org/) (App Router)
+- **Framework:** [Next.js 16.2.9](https://nextjs.org/) (App Router) + React 19
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **Animations:** [Framer Motion](https://www.framer.com/motion/)
-- **AI Integration:** [Vercel AI SDK](https://sdk.vercel.ai/docs) + Google Gemini
-- **Security:** Cloudflare Turnstile
+- **AI Integration:** [Vercel AI SDK v6](https://sdk.vercel.ai/docs) + Google Gemini
+- **Security:** BotID, Cloudflare Turnstile
 - **Backend/Database:** [Supabase](https://supabase.com/) (PostgreSQL + Auth + Storage)
 
 ## 🛠️ Setup Instructions
