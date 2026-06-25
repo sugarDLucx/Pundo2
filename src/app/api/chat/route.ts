@@ -21,7 +21,7 @@ Your job is to provide helpful, concise, and professional financial advice. Do n
 Keep your responses relatively brief unless the user asks for a detailed plan.`
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     console.error('Chat API Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
